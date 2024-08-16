@@ -1,25 +1,34 @@
 import * as React from 'react';
+import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+
 import { theme } from '../../constants';
+
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
 import { ThemeProvider } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import CssBaseline from '@mui/material/CssBaseline';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
 
 
 const drawerWidth = 240;
-const navItems = ['Home', 'Ticket', 'Favorite Ticket', 'About Us'];
+
+const navItems = [
+  { screen: 'Home', to: '/home' },
+  { screen: 'Ticket', to: '/ticket' },
+  { screen: 'Favorite Ticket', to: '/favoriteTicket' },
+  { screen: 'About Us', to: '/aboutUs' },
+];
 
 const Menu = (props) => {
   const { window } = props;
@@ -37,15 +46,19 @@ const Menu = (props) => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
+          <Link key={item.to} to={item.to} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <ListItem disablePadding>
+              <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
+                <ListItemText primary={item.screen} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
       </List>
       <Divider />
-      <Button sx={{ width: '100%', mt: 2 }}>Login</Button>
+      <Link to={'/login'} style={{ textDecoration: 'none' }}>
+        <Button sx={{ width: '100%', mt: 2 }}>Login</Button>
+      </Link>
     </Box>
   );
 
@@ -75,13 +88,17 @@ const Menu = (props) => {
             </Typography>
             <Box sx={{ display: { xs: 'none', sm: 'block' }, flexGrow: 0.1 }}>
               {navItems.map((item) => (
-                <Button key={item} sx={{ color: '#fff', px: 2 }}>
-                  {item}
+                <Button key={item.to} sx={{ color: '#fff', px: 2 }}>
+                  <Link to={item.to} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {item.screen}
+                  </Link>
                 </Button>
               ))}
             </Box>
             <Button sx={{ color: '#fff', ml: 2 }}>
-              Login
+              <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                Login
+              </Link>
             </Button>
           </Toolbar>
         </AppBar>
