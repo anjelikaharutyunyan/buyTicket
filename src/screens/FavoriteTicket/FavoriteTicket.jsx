@@ -1,6 +1,6 @@
 const FavoriteTicket = () => {
   return (
-    <h1>FavoriteTicket</h1>
+    <h1>h</h1>
   )
 }
 
