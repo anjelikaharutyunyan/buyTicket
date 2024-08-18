@@ -3,17 +3,27 @@ import TicketCard from '../../components/TicketCard/TicketCard';
 import { tickets } from './../../components/TicketCard/constants';
 import Calendar from '../../components/Calendar/Calendar';
 import useSoonestDates from '../../hooks/useSoonestDate';
+// import { json } from 'react-router-dom';
 
 
 const Home = () => {
-  const [likedTickets, setLikedTickets] = useState({});
+  const [likedTickets, setLikedTickets] = useState(() => {
+    const likedItems = localStorage.getItem("likedTickets")
+    return likedItems ? JSON.parse(likedItems) : {}
+  });
   const soonestTickets = useSoonestDates(tickets);
 
   const handleLikeTicket = (title) => {
-    setLikedTickets(prev => ({
-      ...prev,
-      [title]: !prev[title]
-    }));
+    setLikedTickets(prev => {
+      const updatedFavorites = {
+        ...prev,
+        [title]: !prev[title]
+      }
+
+      localStorage.setItem("likedTickets", JSON.stringify(updatedFavorites)) // local storage-um pahum em favorite aracnery
+      return updatedFavorites
+    });
+
   };
 
   return (
@@ -47,7 +57,7 @@ const Home = () => {
             />
           ))}
         </div>
-      </div>
+      </div>  
     </div>
   );
 };

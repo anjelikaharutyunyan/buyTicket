@@ -3,7 +3,7 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import Favorite from '@mui/icons-material/Favorite';
 
-const TicketCard = ({ ticket, isLiked, onLike }) => {
+const TicketCard = ({ ticket , isLiked, onLike }) => {
     return (
         <Card sx={{ maxWidth: 270, mb: 2 }}>
             <CardMedia
