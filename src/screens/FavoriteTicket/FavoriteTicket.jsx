@@ -44,7 +44,7 @@ const FavoriteTicket = () => {
             <TicketCard
               key={index}
               ticket={ ticket }
-              isLiked={true}
+              isLiked={!likedTickets[ticket.title] ? handleRemoveLike(ticket) : true} // bag kar fix areci
               onLike={() => handleRemoveLike(ticket)}
             />
           ))}
