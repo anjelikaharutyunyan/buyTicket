@@ -4,6 +4,8 @@ import { tickets } from './../../components/TicketCard/constants';
 import Calendar from '../../components/Calendar/Calendar';
 import useSoonestDates from '../../hooks/useSoonestDate';
 import SearchAppBar from '../../components/Search/Search';
+import BasicSelect from '../../components/Select/Select';
+
 
 const Home = () => {
   const [likedTickets, setLikedTickets] = useState(() => {
@@ -27,7 +29,10 @@ const Home = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', marginTop: '100px', justifyContent: 'center', paddingInline: '40px', gap: '30px' }}>
-      <SearchAppBar onSearch={setFilteredTickets} />
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',  gap: '60px'}}>
+        <SearchAppBar onSearch={setFilteredTickets} />
+        <BasicSelect />
+      </div>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <Calendar />
         <div>
