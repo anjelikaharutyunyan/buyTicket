@@ -1,26 +1,19 @@
-import * as React from 'react';
 import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import useSoonestDates from '../../hooks/useSoonestDate';
-import { tickets } from '../TicketCard/constants';
 
-export default function BasicSelect() {
+export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     const [sortOrder, setSortOrder] = useState('latest');
-    const [sortedTickets, setSortedTickets] = useState([]);
-    
-    // Call the hook at the top level
-    const soonestTickets = useSoonestDates(tickets);
 
     useEffect(() => {
-        let sorted = [...tickets];
+        let sorted = [...filteredTickets];
         
         switch (sortOrder) {
             case 'latest':
-                sorted = soonestTickets; // Use the tickets sorted by soonest date
+                sorted.sort((a, b) => new Date(a.date) - new Date(b.date)); 
                 break;
             case 'low':
                 sorted.sort((a, b) => a.price - b.price);
@@ -32,8 +25,8 @@ export default function BasicSelect() {
                 break;
         }
         
-        setSortedTickets(sorted);
-    }, [sortOrder, tickets, soonestTickets]);
+        setFilteredTickets(sorted);
+    }, [sortOrder, filteredTickets, setFilteredTickets]);
 
     const handleChange = (event) => {
         setSortOrder(event.target.value);
