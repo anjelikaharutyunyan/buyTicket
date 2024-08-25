@@ -6,6 +6,7 @@ import useSoonestDates from '../../hooks/useSoonestDate';
 import SearchAppBar from '../../components/Search/Search';
 import BasicSelect from '../../components/Select/Select';
 
+
 const Home = () => {
   const [likedTickets, setLikedTickets] = useState(() => {
     const likedItems = localStorage.getItem("likedTickets");
