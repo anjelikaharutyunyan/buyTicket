@@ -19,14 +19,14 @@ import IconButton from '@mui/material/IconButton';
 import CssBaseline from '@mui/material/CssBaseline';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/authSlice';
 
 const drawerWidth = 240;
 
 const navItems = [
   { screen: 'Home', to: '/home' },
   { screen: 'Ticket', to: '/ticket' },
-  { screen: 'Favorite Ticket', to: '/favoriteTicket' },
   { screen: 'About Us', to: '/aboutUs' },
 ];
 
@@ -36,6 +36,13 @@ const Menu = (props) => {
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+// es hatvachy redux toolkiti hamar e
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   const drawer = (
@@ -54,10 +61,22 @@ const Menu = (props) => {
             </ListItem>
           </Link>
         ))}
+        {/* stex nerqwvoum poxel em chyc ta "Favorite Ticket" ka te voch */}
+        {isLoggedIn && ( 
+          <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <ListItem disablePadding>
+              <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
+                <ListItemText primary="Favorite Ticket" />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+        )}
       </List>
       <Divider />
-      <Link to={'/login'} style={{ textDecoration: 'none' }}>
-        <Button sx={{ width: '100%', mt: 2 }}>Login</Button>
+      <Link to={isLoggedIn ? '/' : '/login'} style={{ textDecoration: 'none' }}>
+        <Button sx={{ width: '100%', mt: 2 }}>
+          {isLoggedIn ? 'Home' : 'Login'}
+        </Button>
       </Link>
     </Box>
   );
@@ -94,11 +113,24 @@ const Menu = (props) => {
                   </Link>
                 </Button>
               ))}
+              {/* stex el knopken chyc ta te voch */}
+              {isLoggedIn && ( 
+                <Button sx={{ color: '#fff', px: 2 }}>
+                  <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Favorite Ticket
+                  </Link>
+                </Button>
+              )}
             </Box>
-            <Button sx={{ color: '#fff', ml: 2 }}>
-              <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
-                Login
-              </Link>
+            <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
+              {/* ete login exac e estex poxvum e Loginy Logouti */}
+              {isLoggedIn ? (
+                <p>{user.username} Logout</p>
+              ) : (
+                <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  Login
+                </Link>
+              )}
             </Button>
           </Toolbar>
         </AppBar>
