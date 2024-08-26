@@ -6,15 +6,22 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
-    const [sortOrder, setSortOrder] = useState('latest');
+    const [sortOrder, setSortOrder] = useState('');
 
     useEffect(() => {
         let sorted = [...filteredTickets];
         
         switch (sortOrder) {
             case 'latest':
-                sorted.sort((a, b) => new Date(a.date) - new Date(b.date)); 
+                sorted.sort((a, b) => {
+                    const parseDate = (dateString) => {
+                        const [day, month, year] = dateString.split('.').map(Number);
+                        return new Date(`${year}-${month}-${day}`);
+                    };
+                    return parseDate(b.date) - parseDate(a.date);
+                });
                 break;
+        
             case 'low':
                 sorted.sort((a, b) => a.price - b.price);
                 break;

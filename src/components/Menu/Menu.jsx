@@ -24,7 +24,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 const drawerWidth = 240;
 
 const navItems = [
-  { screen: 'Home', to: '/home' },
+  { screen: 'Home', to: '/' },
   { screen: 'Ticket', to: '/ticket' },
   { screen: 'Favorite Ticket', to: '/favoriteTicket' },
   { screen: 'About Us', to: '/aboutUs' },
