@@ -25,7 +25,7 @@ import { logout } from '../../store/authSlice';
 const drawerWidth = 240;
 
 const navItems = [
-  { screen: 'Home', to: '/home' },
+  { screen: 'Home', to: '/' },
   { screen: 'Ticket', to: '/ticket' },
   { screen: 'About Us', to: '/aboutUs' },
 ];

@@ -55,7 +55,6 @@ export default function SearchAppBar({ onSearch }) {
     };
 
     return (
-        <div>
             <Search style={{ width: '40%' }}>
                 <SearchIconWrapper>
                     <SearchIcon />
@@ -66,6 +65,5 @@ export default function SearchAppBar({ onSearch }) {
                     onChange={(e) => handleSearch(e.target.value)}
                 />
             </Search>
-        </div>
     );
 }
