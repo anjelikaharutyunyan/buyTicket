@@ -28,6 +28,22 @@ const Home = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', marginTop: '100px', justifyContent: 'center', paddingInline: '40px', gap: '30px' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', }}>
+        <Calendar />
+        <div>
+          <h1>Soon</h1>
+          <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
+            {soonestTickets.map((ticket, index) => (
+              <TicketCard
+                key={index}
+                ticket={{ ...ticket, date: ticket.formattedDate }}
+                isLiked={!!likedTickets[ticket.title]}
+                onLike={() => handleLikeTicket(ticket.title)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '60px' }}>
         <SearchAppBar onSearch={setFilteredTickets} />
         <BasicSelect filteredTickets={filteredTickets} setFilteredTickets={setFilteredTickets} />
@@ -51,22 +67,7 @@ const Home = () => {
           )}
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between',flexWrap: 'wrap', }}>
-          <Calendar />
-        <div>
-          <h1>Soon</h1>
-          <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
-            {soonestTickets.map((ticket, index) => (
-              <TicketCard
-                key={index}
-                ticket={{ ...ticket, date: ticket.formattedDate }}
-                isLiked={!!likedTickets[ticket.title]}
-                onLike={() => handleLikeTicket(ticket.title)}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+
     </div>
   );
 };
