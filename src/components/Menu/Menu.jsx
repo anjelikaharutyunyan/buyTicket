@@ -26,7 +26,7 @@ const drawerWidth = 240;
 
 const navItems = [
   { screen: 'Home', to: '/' },
-  { screen: 'Ticket', to: '/ticket' },
+  // { screen: 'Ticket', to: '/ticket' },
   { screen: 'About Us', to: '/aboutUs' },
 ];
 
@@ -37,7 +37,7 @@ const Menu = (props) => {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
-// es hatvachy redux toolkiti hamar e
+  // es hatvachy redux toolkiti hamar e
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
@@ -62,11 +62,20 @@ const Menu = (props) => {
           </Link>
         ))}
         {/* stex nerqwvoum poxel em chyc ta "Favorite Ticket" ka te voch */}
-        {isLoggedIn && ( 
+        {isLoggedIn && (
           <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
                 <ListItemText primary="Favorite Ticket" />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+        )}
+        {isLoggedIn && (
+          <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <ListItem disablePadding>
+              <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
+                <ListItemText primary="Ticket"/>
               </ListItemButton>
             </ListItem>
           </Link>
@@ -114,10 +123,17 @@ const Menu = (props) => {
                 </Button>
               ))}
               {/* stex el knopken chyc ta te voch */}
-              {isLoggedIn && ( 
+              {isLoggedIn && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
                     Favorite Ticket
+                  </Link>
+                </Button>
+              )}
+                 {isLoggedIn && (
+                <Button sx={{ color: '#fff', px: 2 }}>
+                  <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Ticket
                   </Link>
                 </Button>
               )}

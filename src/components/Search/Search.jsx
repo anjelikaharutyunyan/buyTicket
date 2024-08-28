@@ -1,8 +1,7 @@
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { collection, endAt, getDocs, orderBy, query, startAt } from 'firebase/firestore';
-import { db } from '../../firebase/firebase';
+import { tickets } from '../TicketCard/constants';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -46,16 +45,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function SearchAppBar({ onSearch }) {
+const SearchAppBar = ({ onSearch }) => {
 
-    const handleSearch = async (searchQuery) => {
-        const ticketsCollection = collection(db, 'ticket');
-        const q = query(ticketsCollection, orderBy('title'), startAt(searchQuery), endAt(searchQuery + "\uf8ff"));
-
-        const querySnapshot = await getDocs(q);
-        const searchResult = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-        onSearch(searchResult)
-    }
+    const handleSearch = (query) => {
+        const filteredTickets = tickets.filter(ticket =>
+            ticket.title.toLowerCase().includes(query.toLowerCase())
+        );
+        onSearch(filteredTickets);
+    };
 
     return (
         <Search style={{ width: '40%' }}>
@@ -70,3 +67,4 @@ export default function SearchAppBar({ onSearch }) {
         </Search>
     );
 }
+export default SearchAppBar
