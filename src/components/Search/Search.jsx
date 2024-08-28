@@ -1,7 +1,8 @@
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { tickets } from '../TicketCard/constants';
+import { collection, endAt, getDocs, orderBy, query, startAt } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -47,23 +48,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchAppBar({ onSearch }) {
 
-    const handleSearch = (query) => {
-        const filteredTickets = tickets.filter(ticket =>
-            ticket.title.toLowerCase().includes(query.toLowerCase())
-        );
-        onSearch(filteredTickets);
-    };
+    const handleSearch = async (searchQuery) => {
+        const ticketsCollection = collection(db, 'ticket');
+        const q = query(ticketsCollection, orderBy('title'), startAt(searchQuery), endAt(searchQuery + "\uf8ff"));
+
+        const querySnapshot = await getDocs(q);
+        const searchResult = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        onSearch(searchResult)
+    }
 
     return (
-            <Search style={{ width: '40%' }}>
-                <SearchIconWrapper>
-                    <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => handleSearch(e.target.value)}
-                />
-            </Search>
+        <Search style={{ width: '40%' }}>
+            <SearchIconWrapper>
+                <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={(e) => handleSearch(e.target.value)}
+            />
+        </Search>
     );
 }

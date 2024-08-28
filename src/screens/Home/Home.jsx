@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
 import TicketCard from '../../components/TicketCard/TicketCard';
-import { tickets } from './../../components/TicketCard/constants';
 import Calendar from '../../components/Calendar/Calendar';
 import useSoonestDates from '../../hooks/useSoonestDate';
 import SearchAppBar from '../../components/Search/Search';
 import BasicSelect from '../../components/Select/Select';
-
+import {db} from '../../firebase/firebase'
 
 const Home = () => {
   const [likedTickets, setLikedTickets] = useState(() => {
@@ -13,8 +13,21 @@ const Home = () => {
     return likedItems ? JSON.parse(likedItems) : {};
   });
 
-  const [filteredTickets, setFilteredTickets] = useState(tickets);
+  const [filteredTickets, setFilteredTickets] = useState([]);
+  const [tickets, setTickets] = useState([]);
   const soonestTickets = useSoonestDates(tickets);
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      const ticketsCollection = collection(db, 'ticket'); 
+      const ticketSnapshot = await getDocs(ticketsCollection);
+      const ticketList = ticketSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setTickets(ticketList);
+      setFilteredTickets(ticketList);
+    };
+
+    fetchTickets();
+  }, []);
 
   const handleLikeTicket = (title) => {
     setLikedTickets(prev => {
@@ -68,7 +81,6 @@ const Home = () => {
           )}
         </div>
       </div>
-
     </div>
   );
 };

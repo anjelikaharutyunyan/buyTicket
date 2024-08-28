@@ -4,36 +4,38 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
 
 export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     const [sortOrder, setSortOrder] = useState('');
 
     useEffect(() => {
-        let sorted = [...filteredTickets];
-        
+        const ticketsCollection = collection(db, 'ticket');
+        let firestoreQuery = ticketsCollection;
+
         switch (sortOrder) {
             case 'latest':
-                sorted.sort((a, b) => {
-                    const parseDate = (dateString) => {
-                        const [day, month, year] = dateString.split('.').map(Number);
-                        return new Date(`${year}-${month}-${day}`);
-                    };
-                    return parseDate(b.date) - parseDate(a.date);
-                });
+                firestoreQuery = query(ticketsCollection, orderBy('date', 'desc'));
                 break;
-        
             case 'low':
-                sorted.sort((a, b) => a.price - b.price);
+                firestoreQuery = query(ticketsCollection, orderBy('price', 'asc'));
                 break;
             case 'high':
-                sorted.sort((a, b) => b.price - a.price);
+                firestoreQuery = query(ticketsCollection, orderBy('price', 'desc'));
                 break;
             default:
                 break;
         }
-        
-        setFilteredTickets(sorted);
-    }, [sortOrder, filteredTickets, setFilteredTickets]);
+        onSnapshot(firestoreQuery, (snapshot) => {
+            const tickets = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }))
+            setFilteredTickets(tickets)
+        })
+
+    }, [sortOrder, setFilteredTickets]);
 
     const handleChange = (event) => {
         setSortOrder(event.target.value);
