@@ -1,52 +1,67 @@
-import { useState } from 'react';
+
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
-import { login, logout } from '../../store/authSlice'; 
+import { login, logout } from '../../store/authSlice';
+import { auth, db } from '../../firebase/firebase';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
-  const [users, setUsers] = useState([]);
   const [isRegistering, setIsRegistering] = useState(true);
   const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  const handleRegister = () => {
-    if (name && username && password) {
-      const userExists = users.some(user => user.username === username);
-      if (userExists) {
-        setError('User already exists');
-        return;
-      }
-      setUsers([...users, { name, username, password }]);
-      setName('');
-      setUsername('');
-      setPassword('');
+  const handleRegister = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, 'users', user.uid), {
+        name: name,
+        email: user.email,
+      });
+
+      dispatch(login({ email: user.email, uid: user.uid, name: name }));
       setError('');
-      setIsRegistering(false);
-    } else {
-      setError('Please enter name, username, and password');
+    } catch (error) {
+      setError(error.message);
     }
   };
 
-  const handleLogin = () => {
-    const user = users.find(user => user.username === username && user.password === password);
-    if (user) {
-      dispatch(login(user));
-      setUsername('');
-      setPassword('');
+  const handleLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const userData = userDoc.data();
+
+      dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
       setError('');
-    } else {
-      setError('Invalid username or password');
+      navigate('/');
+    } catch (error) {
+      setError('Invalid email or password');
     }
   };
 
-  const handleLogout = () => {
-    dispatch(logout()); 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      dispatch(logout());
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -57,7 +72,7 @@ const Login = () => {
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
             <Box>
-              <Typography variant="h4">{isRegistering ? 'Sign Up' : 'LogIn'}</Typography>
+              <Typography variant="h4">{isRegistering ? 'Sign Up' : 'Log In'}</Typography>
               {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
               {isRegistering && (
                 <TextField
@@ -70,12 +85,12 @@ const Login = () => {
                 />
               )}
               <TextField
-                label="Username"
+                label="Email"
                 variant="outlined"
                 margin="normal"
                 fullWidth
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 label="Password"
@@ -93,7 +108,7 @@ const Login = () => {
                 onClick={isRegistering ? handleRegister : handleLogin}
                 sx={{ mt: 2 }}
               >
-                {isRegistering ? 'Sign Up' : 'Login'}
+                {isRegistering ? 'Sign Up' : 'Log In'}
               </Button>
               <Button
                 variant="text"
@@ -102,20 +117,11 @@ const Login = () => {
                 onClick={() => setIsRegistering(!isRegistering)}
                 sx={{ mt: 2 }}
               >
-                {isRegistering ? 'Login' : 'Sign Up'}
+                {isRegistering ? 'Log In' : 'Sign Up'}
               </Button>
             </Box>
           ) : (
             <Box>
-              <Typography variant="h4">Welcome, {currentUser.name}!</Typography>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleLogout}
-                sx={{ mt: 2 }}
-              >
-                Logout
-              </Button>
             </Box>
           )}
         </Box>
