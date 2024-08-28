@@ -7,6 +7,7 @@ import SearchAppBar from '../../components/Search/Search';
 import BasicSelect from '../../components/Select/Select';
 import {db} from '../../firebase/firebase'
 
+
 const Home = () => {
   const [likedTickets, setLikedTickets] = useState(() => {
     const likedItems = localStorage.getItem("likedTickets");
