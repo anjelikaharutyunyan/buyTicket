@@ -125,7 +125,7 @@ const Menu = (props) => {
             <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
               {/* ete login exac e estex poxvum e Loginy Logouti */}
               {isLoggedIn ? (
-                <p>{user.username} Logout</p>
+                <p>{user.name} Logout</p>
               ) : (
                 <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
                   Login
