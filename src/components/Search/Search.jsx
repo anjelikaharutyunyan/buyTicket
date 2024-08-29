@@ -1,7 +1,8 @@
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { tickets } from '../TicketCard/constants';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -46,12 +47,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const SearchAppBar = ({ onSearch }) => {
+    const handleSearch = async (searchQuery) => {
+        const lowercaseQuery = searchQuery.toLowerCase();
+        const ticketsCollection = collection(db, 'ticket');
+        const q = query(ticketsCollection);
+        const querySnapshot = await getDocs(q);
+        const searchResult = querySnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .filter(ticket =>
+                ticket.title.toLowerCase().includes(lowercaseQuery)
+            );
 
-    const handleSearch = (query) => {
-        const filteredTickets = tickets.filter(ticket =>
-            ticket.title.toLowerCase().includes(query.toLowerCase())
-        );
-        onSearch(filteredTickets);
+        onSearch(searchResult);
     };
 
     return (
@@ -67,4 +74,5 @@ const SearchAppBar = ({ onSearch }) => {
         </Search>
     );
 }
-export default SearchAppBar
+
+export default SearchAppBar;

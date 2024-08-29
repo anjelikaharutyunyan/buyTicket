@@ -13,7 +13,7 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     useEffect(() => {
         const ticketsCollection = collection(db, 'ticket');
         let firestoreQuery = ticketsCollection;
-
+        
         switch (sortOrder) {
             case 'latest':
                 firestoreQuery = query(ticketsCollection, orderBy('date', 'desc'));
@@ -25,16 +25,17 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
                 firestoreQuery = query(ticketsCollection, orderBy('price', 'desc'));
                 break;
             default:
+                firestoreQuery = query(ticketsCollection); 
                 break;
         }
-        onSnapshot(firestoreQuery, (snapshot) => {
+        const unsubscribe = onSnapshot(firestoreQuery, (snapshot) => {
             const tickets = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
-            }))
-            setFilteredTickets(tickets)
-        })
-
+            }));
+            setFilteredTickets(tickets);
+        });
+        return () => unsubscribe();
     }, [sortOrder, setFilteredTickets]);
 
     const handleChange = (event) => {
