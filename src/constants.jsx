@@ -8,3 +8,5 @@ export const theme = createTheme({
         }
     }
 });
+
+export const TICKETS_PER_PAGE = 4;

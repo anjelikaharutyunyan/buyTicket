@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { collection, deleteDoc, doc, getDocs, orderBy, query, limit } from 'firebase/firestore';
 import TicketCard from '../../components/TicketCard/TicketCard';
 import Calendar from '../../components/Calendar/Calendar';
 import SearchAppBar from '../../components/Search/Search';
 import BasicSelect from '../../components/Select/Select';
 import { db } from '../../firebase/firebase';
+import { collection, deleteDoc, doc, getDocs, orderBy, query, limit } from 'firebase/firestore';
+import BasicPagination from '../../components/Pagination/Pagination';
+import { TICKETS_PER_PAGE } from '../../constants';
 
 const Home = () => {
   const [likedTickets, setLikedTickets] = useState(() => {
@@ -15,6 +17,8 @@ const Home = () => {
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [soonestTickets, setSoonestTickets] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -62,7 +66,13 @@ const Home = () => {
     });
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
+  const indexOfLastTicket = currentPage * TICKETS_PER_PAGE;
+  const indexOfFirstTicket = indexOfLastTicket - TICKETS_PER_PAGE;
+  const currentTickets = filteredTickets.slice(indexOfFirstTicket, indexOfLastTicket);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', marginTop: '100px', justifyContent: 'center', paddingInline: '40px', gap: '30px' }}>
@@ -89,8 +99,8 @@ const Home = () => {
       <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#f9be3257' }}>
         <h1 style={{ paddingLeft: '55px' }}>EVENTS</h1>
         <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
-          {filteredTickets.length > 0 ? (
-            filteredTickets.map((ticket) => (
+          {currentTickets.length > 0 ? (
+            currentTickets.map((ticket) => (
               <TicketCard
                 key={ticket.id}
                 ticket={ticket}
@@ -104,15 +114,12 @@ const Home = () => {
             </div>
           )}
         </div>
-      </div>
-      <Stack spacing={2} style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
-        <Pagination
-          count={numberOfPages}
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary" 
+        <BasicPagination
+          totalItems={filteredTickets.length}
+          itemsPerPage={TICKETS_PER_PAGE}
+          onPageChange={handlePageChange}
         />
-      </Stack>
+      </div>
     </div>
   );
 };
