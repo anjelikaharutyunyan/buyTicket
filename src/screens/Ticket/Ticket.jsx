@@ -1,7 +1,8 @@
-import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
 import { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
+import TicketCard from '../../components/TicketCard/TicketCard';
+import { Box, TextField, Button, Typography } from '@mui/material';
 
 const Ticket = () => {
     const [title, setTitle] = useState('');
@@ -9,6 +10,10 @@ const Ticket = () => {
     const [image, setImage] = useState('');
     const [price, setPrice] = useState('');
     const [date, setDate] = useState('');
+
+    const convertToDateObject = (dateStr) => {
+        return dateStr ? new Date(dateStr) : null;
+    };
 
     const handlePushData = async () => {
         try {
@@ -18,7 +23,7 @@ const Ticket = () => {
                 description,
                 image,
                 price: parseFloat(price),
-                date: new Date(date),
+                date: convertToDateObject(date),
             });
             setTitle('');
             setDescription('');
@@ -31,63 +36,55 @@ const Ticket = () => {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '300px' }}>
-                <h1>Create your own ticket</h1>
-                <label>Add event title</label>
-                <input
-                    type='text'
+        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2, mt: '100px', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '40%' }}>
+                <Typography variant="h4" gutterBottom>Create Your Own Ticket</Typography>
+                <TextField
+                    label="Event Title"
+                    variant="outlined"
                     value={title}
-                    onChange={(e) => setTitle(e.target.value)} />
-                <label>Add description of event</label>
-                <input
-                    type='text'
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+                <TextField
+                    label="Description of Event"
+                    variant="outlined"
+                    multiline
+                    rows={3}
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)} />
-                <label>Add image link</label>
-                <input
-                    type='text'
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+                <TextField
+                    label="Image URL"
+                    variant="outlined"
                     value={image}
-                    onChange={(e) => setImage(e.target.value)} />
-                <label>Price</label>
-                <input
-                    type='number'
+                    onChange={(e) => setImage(e.target.value)}
+                />
+                <TextField
+                    label="Price"
+                    variant="outlined"
+                    type="number"
                     value={price}
-                    onChange={(e) => setPrice(e.target.value)} />
-                <label>Date</label>
-                <input
-                    type='date'
+                    onChange={(e) => setPrice(e.target.value)}
+                />
+                <TextField
+                    label="Date"
+                    variant="outlined"
+                    type="datetime-local"
+                    InputLabelProps={{ shrink: true }}
                     value={date}
-                    onChange={(e) => setDate(e.target.value)} />
-                <button onClick={handlePushData}>Submit</button>
-            </div>
-            <div style={{ marginTop: '20px' }}>
-                <Card sx={{ maxWidth: 270, mb: 2 }}>
-                    <CardMedia
-                        component="img"
-                        height="140"
-                        image={image || 'https://via.placeholder.com/140'}
-                        alt={title}
-                    />
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                            {title || 'Ticket Title'}
-                        </Typography>
-                        <Typography variant="body2" color="text.primary">
-                            {new Date(date).toLocaleDateString() || 'dd-mm-yyyy'}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            {description || 'Description for event'}
-                        </Typography>
-                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-                            <IconButton color="text.primary" sx={{ mt: 2 }}>
-                                ${price || '0.00'}
-                            </IconButton>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
+                    onChange={(e) => setDate(e.target.value)}
+                />
+                <Button variant="contained" color="primary" onClick={handlePushData}>
+                    Submit
+                </Button>
+            </Box>
+            <Box sx={{ marginTop: 2, maxWidth: 270 }}>
+                <TicketCard
+                    ticket={{ title, description, image, price: parseFloat(price), date: convertToDateObject(date) }}
+                    isLiked={false}
+                />
+            </Box>
+        </Box>
     );
 };
 
