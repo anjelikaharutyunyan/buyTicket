@@ -27,24 +27,13 @@ const AboutUs = () => {
         >
           <h1>About Us</h1>
           <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            lacinia odio vitae vestibulum. Mauris blandit aliquet elit, eget
-            tincidunt nibh pulvinar a. Donec rutrum congue leo eget malesuada.
-            Nulla porttitor accumsan tincidunt. Cras ultricies ligula sed magna
-            dictum porta.
+            We are dedicated to providing the best ticketing services. Our platform ensures a seamless experience for finding and purchasing tickets to various events. We are committed to quality and customer satisfaction.
           </p>
           <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
-            Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut
-            libero malesuada feugiat. Vivamus suscipit tortor eget felis
-            porttitor volutpat. Curabitur arcu erat, accumsan id imperdiet et,
-            porttitor at sem. Praesent sapien massa, convallis a pellentesque
-            nec, egestas non nisi.
+            We are dedicated to providing the best ticketing services. Our platform ensures a seamless experience for finding and purchasing tickets to various events. We are committed to quality and customer satisfaction.
           </p>
           <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
-            Sed porttitor lectus nibh. Curabitur arcu erat, accumsan id
-            imperdiet et, porttitor at sem. Vestibulum ac diam sit amet quam
-            vehicula elementum sed sit amet dui. Curabitur arcu erat, accumsan
-            id imperdiet et, porttitor at sem. Proin eget tortor risus.
+            We are dedicated to providing the best ticketing services. Our platform ensures a seamless experience for finding and purchasing tickets to various events. We are committed to quality and customer satisfaction.
           </p>
         </div>
       </div>
@@ -72,7 +61,7 @@ const AboutUs = () => {
         >
           <div style={{ textAlign: "center" }}>
             <img
-              src=""
+              src="https://www.shutterstock.com/image-photo/happy-middle-aged-business-man-600nw-2306186897.jpg"
               alt="Team Member 1"
               style={{ width: "150px", height: "150px", borderRadius: "50%" }}
             />
@@ -81,7 +70,7 @@ const AboutUs = () => {
           </div>
           <div style={{ textAlign: "center" }}>
             <img
-              src=""
+              src="https://media.istockphoto.com/id/831902150/photo/ive-solidified-my-name-in-the-business-world.jpg?s=612x612&w=0&k=20&c=GCkoeN4GXE9W3EgNmwnInZpvGEepUSPd7N8NMKGBGFs="
               alt="Team Member 2"
               style={{ width: "150px", height: "150px", borderRadius: "50%" }}
             />

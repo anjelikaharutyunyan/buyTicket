@@ -7,6 +7,7 @@ import Ticket from './screens/Ticket/Ticket'
 
 import AboutUs from './screens/AboutUs/AboutUs'
 import FavoriteTicket from './screens/FavoriteTicket/FavoriteTicket'
+import Footer from './screens/AboutUs/Footer';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+      <Footer />
     </Router>
   )
 }
