@@ -1,7 +1,91 @@
-const Ticket = () => {
-    return (
-        <h1>Ticket</h1>
-    )
-}
+import { useState } from 'react';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
+import TicketCard from '../../components/TicketCard/TicketCard';
+import { Box, TextField, Button, Typography } from '@mui/material';
 
-export default Ticket
+const Ticket = () => {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [image, setImage] = useState('');
+    const [price, setPrice] = useState('');
+    const [date, setDate] = useState('');
+
+    const convertToDateObject = (dateStr) => {
+        return dateStr ? new Date(dateStr) : null;
+    };
+
+    const handlePushData = async () => {
+        try {
+            const ticketCollection = collection(db, 'ticket');
+            await addDoc(ticketCollection, {
+                title,
+                description,
+                image,
+                price: parseFloat(price),
+                date: convertToDateObject(date),
+            });
+            setTitle('');
+            setDescription('');
+            setImage('');
+            setPrice('');
+            setDate('');
+        } catch (error) {
+            console.error('Error adding ticket:', error);
+        }
+    };
+
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2, mt: '100px', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '40%' }}>
+                <Typography variant="h4" gutterBottom>Create Your Own Ticket</Typography>
+                <TextField
+                    label="Event Title"
+                    variant="outlined"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+                <TextField
+                    label="Description of Event"
+                    variant="outlined"
+                    multiline
+                    rows={3}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+                <TextField
+                    label="Image URL"
+                    variant="outlined"
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
+                />
+                <TextField
+                    label="Price"
+                    variant="outlined"
+                    type="number"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                />
+                <TextField
+                    label="Date"
+                    variant="outlined"
+                    type="datetime-local"
+                    InputLabelProps={{ shrink: true }}
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                />
+                <Button variant="contained" color="primary" onClick={handlePushData}>
+                    Submit
+                </Button>
+            </Box>
+            <Box sx={{ marginTop: 2, maxWidth: 270 }}>
+                <TicketCard
+                    ticket={{ title, description, image, price: parseFloat(price), date: convertToDateObject(date) }}
+                    isLiked={false}
+                />
+            </Box>
+        </Box>
+    );
+};
+
+export default Ticket;

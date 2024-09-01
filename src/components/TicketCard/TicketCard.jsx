@@ -18,32 +18,33 @@ function formatTimestamp(date) {
             hour12: true
         });
     }
-    return 'Invalid date';
+    return 'dd.mm.yyyy';
 }
+const no_available_image = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO5kCepNdhZvDKJtmPAIWnloSdTal7N1CQaA&s'
 
 const TicketCard = ({ ticket, isLiked, onLike }) => {
     const formattedDate = formatTimestamp(ticket.date); 
     return (
-        <Card sx={{ maxWidth: 270, mb: 2 }}>
+        <Card sx={{ width: 270, mb: 2 }}>
             <CardMedia
                 component="img"
                 height="140"
-                image={ticket.image}
+                image={ticket.image || no_available_image}
                 alt={ticket.title}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                    {ticket.title}
+                    {ticket.title || 'title'}
                 </Typography>
                 <Typography variant="body2" color="text.primary">
-                    {formattedDate || 'No date available'} 
+                    {formattedDate} 
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {ticket.description}
+                    {ticket.description || 'event description'}
                 </Typography>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                     <IconButton color="text.primary" sx={{ mt: 2 }}>
-                        ${ticket.price}
+                        ${ticket.price || '0'}
                     </IconButton>
                     <IconButton onClick={onLike} sx={{ mt: 2 }}>
                         {isLiked ? <Favorite color="error" /> : <FavoriteBorder />}
