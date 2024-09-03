@@ -1,7 +1,8 @@
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query } from 'firebase/firestore';
+import debounce from 'lodash.debounce'
 import { db } from '../../firebase/firebase';
 
 const Search = styled('div')(({ theme }) => ({
@@ -57,10 +58,12 @@ const SearchAppBar = ({ onSearch }) => {
             .filter(ticket =>
                 ticket.title.toLowerCase().includes(lowercaseQuery)
             );
-
         onSearch(searchResult);
     };
 
+
+    const updateQuery = e => handleSearch(e?.target?.value)
+    const debounceOnChange = debounce(updateQuery, 200)
     return (
         <Search style={{ width: '40%' }}>
             <SearchIconWrapper>
@@ -69,10 +72,11 @@ const SearchAppBar = ({ onSearch }) => {
             <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ 'aria-label': 'search' }}
-                onChange={(e) => handleSearch(e.target.value)}
+                onChange={debounceOnChange}
             />
         </Search>
     );
 }
+
 
 export default SearchAppBar;
