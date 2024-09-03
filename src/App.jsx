@@ -9,6 +9,8 @@ import AboutUs from './screens/AboutUs/AboutUs'
 import FavoriteTicket from './screens/FavoriteTicket/FavoriteTicket'
 import Footer from './screens/AboutUs/Footer';
 
+import './components/i18next/i18next';
+
 const App = () => {
   return (
     <Router>

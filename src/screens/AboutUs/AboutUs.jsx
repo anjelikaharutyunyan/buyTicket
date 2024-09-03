@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 const AboutUs = () => {
+  const { t } = useTranslation();
   return (
     <div
       style={{
@@ -25,15 +28,15 @@ const AboutUs = () => {
             alignItems: "center",
           }}
         >
-          <h1>About Us</h1>
+          <h1>{t('aboutUs')}</h1>
           <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
-            We are dedicated to providing the best ticketing services. Our platform ensures a seamless experience for finding and purchasing tickets to various events. We are committed to quality and customer satisfaction.
+            {t('aboutText')}
           </p>
           <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
-            We are dedicated to providing the best ticketing services. Our platform ensures a seamless experience for finding and purchasing tickets to various events. We are committed to quality and customer satisfaction.
+            {t('aboutText')}
           </p>
           <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
-            We are dedicated to providing the best ticketing services. Our platform ensures a seamless experience for finding and purchasing tickets to various events. We are committed to quality and customer satisfaction.
+            {t('aboutText')}
           </p>
         </div>
       </div>
@@ -42,13 +45,12 @@ const AboutUs = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "lightgray",
           padding: "20px",
           borderRadius: "8px",
           backgroundColor: "orange",
         }}
       >
-        <h2>Our Team</h2>
+        <h2>{t('ourTeam')}</h2>
         <div
           style={{
             display: "flex",
@@ -65,8 +67,8 @@ const AboutUs = () => {
               alt="Team Member 1"
               style={{ width: "150px", height: "150px", borderRadius: "50%" }}
             />
-            <p>John Doe</p>
-            <p>Founder & CEO</p>
+            <p> {t('founderName')}</p>
+            <p> {t('founderCEO')}</p>
           </div>
           <div style={{ textAlign: "center" }}>
             <img
@@ -74,8 +76,8 @@ const AboutUs = () => {
               alt="Team Member 2"
               style={{ width: "150px", height: "150px", borderRadius: "50%" }}
             />
-            <p>Jane Smith</p>
-            <p>Chief Operating Officer</p>
+            <p>{t('chiefName')}</p>
+            <p> {t('chief')}</p>
           </div>
         </div>
       </div>

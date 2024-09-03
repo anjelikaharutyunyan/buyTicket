@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
@@ -7,9 +6,12 @@ import { auth, db } from '../../firebase/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 
 
 const Login = () => {
+  const { t } = useTranslation();
   const [isRegistering, setIsRegistering] = useState(true);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -65,18 +67,18 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" style={{marginTop: '150px'}}>
       <Box sx={{ mt: 4 }}>
         <Box sx={{ mb: 11 }}>
         </Box>
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
             <Box>
-              <Typography variant="h4">{isRegistering ? 'Sign Up' : 'Log In'}</Typography>
+              <Typography variant="h4">{isRegistering ? t('signUp') : t('login')}</Typography>
               {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
               {isRegistering && (
                 <TextField
-                  label="Name"
+                  label={t('name')}
                   variant="outlined"
                   margin="normal"
                   fullWidth
@@ -85,7 +87,7 @@ const Login = () => {
                 />
               )}
               <TextField
-                label="Email"
+                label={t('email')}
                 variant="outlined"
                 margin="normal"
                 fullWidth
@@ -93,7 +95,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
-                label="Password"
+                label={t('password')}
                 type="password"
                 variant="outlined"
                 margin="normal"
@@ -108,7 +110,7 @@ const Login = () => {
                 onClick={isRegistering ? handleRegister : handleLogin}
                 sx={{ mt: 2 }}
               >
-                {isRegistering ? 'Sign Up' : 'Log In'}
+                {isRegistering ? t('signUp') : t('login')}
               </Button>
               <Button
                 variant="text"
@@ -117,7 +119,7 @@ const Login = () => {
                 onClick={() => setIsRegistering(!isRegistering)}
                 sx={{ mt: 2 }}
               >
-                {isRegistering ? 'Log In' : 'Sign Up'}
+                {isRegistering ? t('login') : t('signUp')}
               </Button>
             </Box>
           ) : (

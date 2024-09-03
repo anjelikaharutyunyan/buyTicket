@@ -7,8 +7,11 @@ import { db } from '../../firebase/firebase';
 import { collection, deleteDoc, doc, getDocs, orderBy, query, limit } from 'firebase/firestore';
 import BasicPagination from '../../components/Pagination/Pagination';
 import { TICKETS_PER_PAGE } from '../../constants';
+import Loader from '../../components/Loader/Loader';
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
+  const { t } = useTranslation();
   const [likedTickets, setLikedTickets] = useState(() => {
     const likedItems = localStorage.getItem("likedTickets");
     return likedItems ? JSON.parse(likedItems) : {};
@@ -17,27 +20,35 @@ const Home = () => {
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [soonestTickets, setSoonestTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchTickets = async () => {
-      const ticketsCollection = collection(db, 'ticket');
-      const ticketSnapshot = await getDocs(ticketsCollection);
-      const today = new Date();
-      const ticketList = [];
+      setLoading(true);
+      try {
+        const ticketsCollection = collection(db, 'ticket');
+        const ticketSnapshot = await getDocs(ticketsCollection);
+        const today = new Date();
+        const ticketList = [];
 
-      for (const docSnap of ticketSnapshot.docs) {
-        const ticketData = docSnap.data();
-        const ticketDate = new Date(ticketData.date);
-        if (ticketDate < today) {
-          await deleteDoc(doc(db, 'ticket', docSnap.id));
-        } else {
-          ticketList.push({ id: docSnap.id, ...ticketData });
+        for (const docSnap of ticketSnapshot.docs) {
+          const ticketData = docSnap.data();
+          const ticketDate = new Date(ticketData.date);
+          if (ticketDate < today) {
+            await deleteDoc(doc(db, 'ticket', docSnap.id));
+          } else {
+            ticketList.push({ id: docSnap.id, ...ticketData });
+          }
         }
+        setTickets(ticketList);
+        setFilteredTickets(ticketList);
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+      } finally {
+        setLoading(false);
       }
-      setTickets(ticketList);
-      setFilteredTickets(ticketList);
     };
 
     fetchTickets();
@@ -45,11 +56,18 @@ const Home = () => {
 
   useEffect(() => {
     const fetchSoonest = async () => {
-      const ticketsCollection = collection(db, 'ticket');
-      const soonestQuery = query(ticketsCollection, orderBy('date', 'asc'), limit(3));
-      const soonestSnapshot = await getDocs(soonestQuery);
-      const soonestList = soonestSnapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-      setSoonestTickets(soonestList);
+      setLoading(true);
+      try {
+        const ticketsCollection = collection(db, 'ticket');
+        const soonestQuery = query(ticketsCollection, orderBy('date', 'asc'), limit(3));
+        const soonestSnapshot = await getDocs(soonestQuery);
+        const soonestList = soonestSnapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        setSoonestTickets(soonestList);
+      } catch (error) {
+        console.error("Error fetching soonest tickets:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchSoonest();
@@ -79,8 +97,8 @@ const Home = () => {
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
         <Calendar />
         <div>
-          <h1>Soon</h1>
-          <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
+          <h1>{t('soon')}</h1>
+          {loading ? <Loader /> : <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
             {soonestTickets.map((ticket) => (
               <TicketCard
                 key={ticket.id}
@@ -89,7 +107,7 @@ const Home = () => {
                 onLike={() => handleLikeTicket(ticket.id)}
               />
             ))}
-          </div>
+          </div>}
         </div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '60px' }}>
@@ -97,23 +115,26 @@ const Home = () => {
         <BasicSelect filteredTickets={filteredTickets} setFilteredTickets={setFilteredTickets} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#f9be3257' }}>
-        <h1 style={{ paddingLeft: '55px' }}>EVENTS</h1>
-        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
-          {currentTickets.length > 0 ? (
-            currentTickets.map((ticket) => (
-              <TicketCard
-                key={ticket.id}
-                ticket={ticket}
-                isLiked={!!likedTickets[ticket.id]}
-                onLike={() => handleLikeTicket(ticket.id)}
-              />
-            ))
-          ) : (
-            <div style={{ height: '100px' }}>
-              <h4>{"There are no results for your request"}</h4>
-            </div>
-          )}
-        </div>
+        <h1 style={{ paddingLeft: '55px' }}>{t('events')}</h1>
+        {loading ? <Loader /> :
+          <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
+            {currentTickets.length > 0 ? (
+              currentTickets.map((ticket) => (
+                <TicketCard
+                  key={ticket.id}
+                  ticket={ticket}
+                  isLiked={!!likedTickets[ticket.id]}
+                  onLike={() => handleLikeTicket(ticket.id)}
+                />
+              ))
+            ) : (
+              <div style={{ height: '100px' }}>
+                <h4>{t('noResult')}</h4>
+              </div>
+            )}
+          </div>}
+
+
         <BasicPagination
           totalItems={filteredTickets.length}
           itemsPerPage={TICKETS_PER_PAGE}
