@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from "react-router-dom";
+import { Link, } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 import { theme } from '../../constants';
@@ -12,31 +12,49 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
-import { ThemeProvider } from '@mui/material';
+import { MenuItem, Select, ThemeProvider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CssBaseline from '@mui/material/CssBaseline';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../store/authSlice';
+import logo from './logo.png'
+import LanguageIcon from '@mui/icons-material/Language';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const drawerWidth = 240;
 
-const navItems = [
-  { screen: 'Home', to: '/' },
-  // { screen: 'Ticket', to: '/ticket' },
-  { screen: 'About Us', to: '/aboutUs' },
-];
-
 const Menu = (props) => {
+  const { i18n } = useTranslation();
+  const { t } = useTranslation();
   const { window } = props;
+  const [language, setLanguage] = React.useState('en');
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/');
+  };
+  const navItems = [
+    { screen: t('home'), to: '/' },
+    { screen: t('aboutUs'), to: '/aboutUs' },
+  ];
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+
+  const handleLanguageChange = (event) => {
+    const selectedLanguage = event.target.value;
+    i18n.changeLanguage(selectedLanguage);
+    setLanguage(selectedLanguage);
+  };
+
   // es hatvachy redux toolkiti hamar e
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const user = useSelector((state) => state.auth.user);
@@ -47,9 +65,9 @@ const Menu = (props) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
-      </Typography>
+      <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+        <img src={logo} alt='Logo' style={{ width: '200px', marginTop: '5px' }} />
+      </Box>
       <Divider />
       <List>
         {navItems.map((item) => (
@@ -75,7 +93,7 @@ const Menu = (props) => {
           <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-                <ListItemText primary="Ticket"/>
+                <ListItemText primary="Ticket" />
               </ListItemButton>
             </ListItem>
           </Link>
@@ -107,13 +125,9 @@ const Menu = (props) => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-            >
-              LOGO
-            </Typography>
+            <Box onClick={handleClick} sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+              <img src={logo} alt='Logo' style={{ width: '200px', marginTop: '5px', cursor: 'pointer' }} />
+            </Box>
             <Box sx={{ display: { xs: 'none', sm: 'block' }, flexGrow: 0.1 }}>
               {navItems.map((item) => (
                 <Button key={item.to} sx={{ color: '#fff', px: 2 }}>
@@ -126,28 +140,44 @@ const Menu = (props) => {
               {isLoggedIn && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Favorite Ticket
+                    {t('favoriteTicket')}
                   </Link>
                 </Button>
               )}
-                 {isLoggedIn && (
+              {isLoggedIn && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Ticket
+                    {t('ticket')}
                   </Link>
                 </Button>
               )}
             </Box>
-            <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
-              {/* ete login exac e estex poxvum e Loginy Logouti */}
-              {isLoggedIn ? (
-                <p>{user.name} Logout</p>
-              ) : (
-                <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  Login
-                </Link>
-              )}
-            </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton sx={{ color: '#fff', }}>
+                <LanguageIcon />
+              </IconButton>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={language}
+                label="Language"
+                style={{ background: '#F9BE32', border: 'none', color: 'white', fontSize: '16px' }}
+                onChange={handleLanguageChange}
+              >
+                <MenuItem value='en'>{t('english')}</MenuItem>
+                <MenuItem value='ru'>{t('russian')}</MenuItem>
+                <MenuItem value='hy'>{t('armenian')}</MenuItem>
+              </Select>
+              <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
+                {isLoggedIn ? (
+                  <p>{user.name} {t('logout')}</p>
+                ) : (
+                  <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {t('login')}
+                  </Link>
+                )}
+              </Button>
+            </Box>
           </Toolbar>
         </AppBar>
         <nav>

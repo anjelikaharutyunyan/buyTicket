@@ -3,8 +3,10 @@ import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import TicketCard from '../../components/TicketCard/TicketCard';
 import { Box, TextField, Button, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const Ticket = () => {
+    const { t } = useTranslation();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
@@ -38,15 +40,15 @@ const Ticket = () => {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 2, mt: '100px', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '40%' }}>
-                <Typography variant="h4" gutterBottom>Create Your Own Ticket</Typography>
+                <Typography variant="h4" gutterBottom>{t('createTicket')}</Typography>
                 <TextField
-                    label="Event Title"
+                    label={t('eventTitle')}
                     variant="outlined"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
                 <TextField
-                    label="Description of Event"
+                    label={t('eventDescription')}
                     variant="outlined"
                     multiline
                     rows={3}
@@ -54,20 +56,20 @@ const Ticket = () => {
                     onChange={(e) => setDescription(e.target.value)}
                 />
                 <TextField
-                    label="Image URL"
+                    label={t('image')}
                     variant="outlined"
                     value={image}
                     onChange={(e) => setImage(e.target.value)}
                 />
                 <TextField
-                    label="Price"
+                    label={t('price')}
                     variant="outlined"
                     type="number"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                 />
                 <TextField
-                    label="Date"
+                    label={t('date')}
                     variant="outlined"
                     type="datetime-local"
                     InputLabelProps={{ shrink: true }}
@@ -75,7 +77,7 @@ const Ticket = () => {
                     onChange={(e) => setDate(e.target.value)}
                 />
                 <Button variant="contained" color="primary" onClick={handlePushData}>
-                    Submit
+                    {t('submit')}
                 </Button>
             </Box>
             <Box sx={{ marginTop: 2, maxWidth: 270 }}>

@@ -6,9 +6,11 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
+import { useTranslation } from 'react-i18next';
 
 export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     const [sortOrder, setSortOrder] = useState('');
+    const { t } = useTranslation();
 
     useEffect(() => {
         const ticketsCollection = collection(db, 'ticket');
@@ -45,7 +47,7 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     return (
         <Box sx={{ width: 200 }}>
             <FormControl fullWidth>
-                <InputLabel id="sort-by-label">Sort by</InputLabel>
+                <InputLabel id="sort-by-label">{t('sortBy')}</InputLabel>
                 <Select
                     labelId="sort-by-label"
                     id="sort-by-select"
@@ -53,9 +55,9 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
                     label="Sort by"
                     onChange={handleChange}
                 >
-                    <MenuItem value="latest">Latest</MenuItem>
-                    <MenuItem value="low">Price: low to high</MenuItem>
-                    <MenuItem value="high">Price: high to low</MenuItem>
+                    <MenuItem value="latest">{t('latest')}</MenuItem>
+                    <MenuItem value="low">{t('lowToHigh')}</MenuItem>
+                    <MenuItem value="high">{t('highToLow')}</MenuItem>
                 </Select>
             </FormControl>
         </Box>

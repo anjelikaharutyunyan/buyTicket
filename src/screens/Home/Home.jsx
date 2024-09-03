@@ -8,8 +8,10 @@ import { collection, deleteDoc, doc, getDocs, orderBy, query, limit } from 'fire
 import BasicPagination from '../../components/Pagination/Pagination';
 import { TICKETS_PER_PAGE } from '../../constants';
 import Loader from '../../components/Loader/Loader';
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
+  const { t } = useTranslation();
   const [likedTickets, setLikedTickets] = useState(() => {
     const likedItems = localStorage.getItem("likedTickets");
     return likedItems ? JSON.parse(likedItems) : {};
@@ -95,7 +97,7 @@ const Home = () => {
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
         <Calendar />
         <div>
-          <h1>Soon</h1>
+          <h1>{t('soon')}</h1>
           {loading ? <Loader /> : <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
             {soonestTickets.map((ticket) => (
               <TicketCard
@@ -113,7 +115,7 @@ const Home = () => {
         <BasicSelect filteredTickets={filteredTickets} setFilteredTickets={setFilteredTickets} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#f9be3257' }}>
-        <h1 style={{ paddingLeft: '55px' }}>EVENTS</h1>
+        <h1 style={{ paddingLeft: '55px' }}>{t('events')}</h1>
         {loading ? <Loader /> :
           <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
             {currentTickets.length > 0 ? (
@@ -127,7 +129,7 @@ const Home = () => {
               ))
             ) : (
               <div style={{ height: '100px' }}>
-                <h4>{"There are no results for your request"}</h4>
+                <h4>{t('noResult')}</h4>
               </div>
             )}
           </div>}

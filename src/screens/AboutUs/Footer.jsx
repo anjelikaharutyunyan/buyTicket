@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Typography, Box, Grid, Link } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Facebook, Instagram, Telegram } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 
 const FooterContainer = styled(Box)(({ theme }) => ({
@@ -27,51 +28,51 @@ const SocialMediaIcons = styled(Box)(({ theme }) => ({
 }));
 
 const Footer = () => {
+    const { t } = useTranslation();
+
     return (
         <FooterContainer>
             <Container>
                 <Grid container spacing={4}>
                     <Grid item xs={12} sm={4}>
                         <Typography variant="h6" gutterBottom>
-                            About Us
+                            {t('aboutUs')}
                         </Typography>
                         <Typography variant="body2" paragraph>
-                            We are dedicated to providing the best ticketing services. Our platform
-                            ensures a seamless experience for finding and purchasing tickets to various
-                            events. We are committed to quality and customer satisfaction.
+                            {t('aboutText')}
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <Typography variant="h6" gutterBottom>
-                            Quick Links
+                            {t('quickLinks')}
                         </Typography>
                         <ul style={{ listStyle: 'none', padding: 0 }}>
                             <li>
-                                <FooterLink href="/">Home</FooterLink>
+                                <FooterLink href="/">{t('home')}</FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/ticket">Ticket</FooterLink>
+                                <FooterLink href="/ticket">{t('ticket')}</FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/favoriteTicket">Favorite Ticket</FooterLink>
+                                <FooterLink href="/favoriteTicket">{t('favoriteTicket')}</FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="#">Privacy Policy</FooterLink>
+                                <FooterLink href="#">{t('privacyPolicy')}</FooterLink>
                             </li>
                         </ul>
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <Typography variant="h6" gutterBottom>
-                            Contact Us
+                        {t('contactUs')}:
                         </Typography>
                         <Typography variant="body2" paragraph>
-                            Email: <FooterLink href="mailto:info@Ticket.am">info@Ticket.am</FooterLink>
+                        {t('email')}: <FooterLink href="mailto:info@Ticket.am">info@Ticket.am</FooterLink>
                         </Typography>
                         <Typography variant="body2" paragraph>
-                            Phone: +374 10 000000
+                        {t('phone')}: +374 10 000000
                         </Typography>
                         <Typography variant="body2" paragraph>
-                            Address: 123 Ulneci Street, Yerevan, Armenia
+                        {t('address')}: 123 Ulneci Street, Yerevan, Armenia
                         </Typography>
                         <SocialMediaIcons>
                             <FooterLink href="https://www.facebook.com" target="_blank" aria-label="Facebook">
@@ -88,7 +89,7 @@ const Footer = () => {
                 </Grid>
                 <Box textAlign="center" mt={4}>
                     <Typography variant="body2" color="textSecondary">
-                        © {new Date().getFullYear()} Ticket.am All rights reserved.
+                        © {new Date().getFullYear()} BuyTicket.am  {t('allRights')}
                     </Typography>
                 </Box>
             </Container>
