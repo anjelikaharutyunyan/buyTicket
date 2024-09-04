@@ -38,7 +38,7 @@ const FavoriteTicket = () => {
     }
   };
   return (
-    <div style={{ padding: "20px", position: "relative", top: "32px" }}>
+    <div style={{ padding: "20px", position: "relative", top: "64px" }}>
       <h1 style={{ textAlign: "center" }}>Favorite Tickets</h1>
       <div>
         <div
