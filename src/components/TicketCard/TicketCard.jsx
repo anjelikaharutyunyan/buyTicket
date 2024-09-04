@@ -3,6 +3,17 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import Favorite from '@mui/icons-material/Favorite';
 import { Timestamp } from 'firebase/firestore';
+import {
+    collection,
+    doc,
+    getDocs,
+    query,
+    setDoc,
+  } from "firebase/firestore";
+  import { useSelector } from "react-redux";
+  import { useEffect, useState } from "react";
+  import { db } from "../../firebase/firebase";
+  import { useNavigate } from "react-router-dom";
 
 function formatTimestamp(date) {
     if (date instanceof Timestamp) {
@@ -24,6 +35,52 @@ const no_available_image = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9
 
 const TicketCard = ({ ticket, isLiked, onLike }) => {
     const formattedDate = formatTimestamp(ticket.date); 
+    const [favorites, setFavorites] = useState([]);
+    const currentUser = useSelector((state) => state.auth.user);
+    const navigate = useNavigate();
+
+    const handleLike = async () => {
+        if (!currentUser) {
+        navigate("/login");
+        return;
+        }
+
+        try {
+        const favoritesRef = doc(
+            db,
+            "users",
+            currentUser.uid,
+            "favorites",
+            ticket.id
+        );
+        await setDoc(favoritesRef, ticket);
+        onLike(ticket); // Update the like state if needed
+        } catch (error) {
+        console.error("Error adding to favorites: ", error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchFavorites = async () => {
+        if (!currentUser) return;
+
+        const favoritesRef = collection(
+            db,
+            "users",
+            currentUser.uid,
+            "favorites"
+        );
+        const q = query(favoritesRef);
+
+        const querySnapshot = await getDocs(q);
+        const favoriteTickets = querySnapshot.docs.map((doc) => doc.data());
+
+        setFavorites(favoriteTickets);
+        };
+
+        fetchFavorites();
+    }, [currentUser]);
+
     return (
         <Card sx={{ width: 270, mb: 2 }}>
             <CardMedia
@@ -46,7 +103,7 @@ const TicketCard = ({ ticket, isLiked, onLike }) => {
                     <IconButton color="text.primary" sx={{ mt: 2 }}>
                         ${ticket.price || '0'}
                     </IconButton>
-                    <IconButton onClick={onLike} sx={{ mt: 2 }}>
+                    <IconButton onClick={handleLike} sx={{ mt: 2 }}>
                         {isLiked ? <Favorite color="error" /> : <FavoriteBorder />}
                     </IconButton>
                     <IconButton sx={{ mt: 2 }}>
