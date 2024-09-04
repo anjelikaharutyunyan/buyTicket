@@ -114,16 +114,6 @@ const Home = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
-  tickets.forEach(ticket => {
-    if (!ticket.ticket4) {
-      console.warn('ticket4 is missing in ticket:', ticket.title);
-    }
-  });
-  
-  // const ticket4Values = tickets.map(ticket => ticket?.ticket4 || 'default value');
-  
-
   const indexOfLastTicket = currentPage * TICKETS_PER_PAGE;
   const indexOfFirstTicket = indexOfLastTicket - TICKETS_PER_PAGE;
   const currentTickets = filteredTickets.slice(indexOfFirstTicket, indexOfLastTicket);
