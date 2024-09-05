@@ -15,7 +15,7 @@ const Home = () => {
   const { t } = useTranslation();
   const [likedTickets, setLikedTickets] = useState({});
   const [filteredTickets, setFilteredTickets] = useState([]);
-  const [tickets, setTickets] = useState([]); 
+  const [tickets, setTickets] = useState([]);
   const [soonestTickets, setSoonestTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentUser = useSelector((state) => state.auth.user);
@@ -30,7 +30,7 @@ const Home = () => {
         const ticketSnapshot = await getDocs(ticketsCollection);
         const today = new Date();
         const ticketList = [];
-    
+
         for (const docSnap of ticketSnapshot.docs) {
           const ticketData = docSnap.data();
           if (ticketData && ticketData.date) {
@@ -44,9 +44,6 @@ const Home = () => {
             console.warn('Invalid ticket data:', ticketData);
           }
         }
-
-        console.log(ticketList);
-
         setTickets(ticketList);
         setFilteredTickets(ticketList);
       } catch (error) {

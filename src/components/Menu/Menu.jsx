@@ -24,6 +24,7 @@ import logo from './logo.png'
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../../firebase/firebase';
 
 
 
@@ -144,7 +145,7 @@ const Menu = (props) => {
                   </Link>
                 </Button>
               )}
-              {isLoggedIn && (
+              {isLoggedIn && auth.currentUser.uid === 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('ticket')}
@@ -170,7 +171,12 @@ const Menu = (props) => {
               </Select>
               <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
                 {isLoggedIn ? (
-                  <p>{user.name} {t('logout')}</p>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <Box> {user.name} </Box>
+                    <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {t('logout')}
+                    </Link>
+                  </div>
                 ) : (
                   <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('login')}
