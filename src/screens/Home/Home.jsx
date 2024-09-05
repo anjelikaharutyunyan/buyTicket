@@ -4,23 +4,21 @@ import Calendar from '../../components/Calendar/Calendar';
 import SearchAppBar from '../../components/Search/Search';
 import BasicSelect from '../../components/Select/Select';
 import { db } from '../../firebase/firebase';
-import { collection, deleteDoc, doc, getDocs, orderBy, query, limit } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, orderBy, query, limit, setDoc } from 'firebase/firestore';
 import BasicPagination from '../../components/Pagination/Pagination';
 import { TICKETS_PER_PAGE } from '../../constants';
 import Loader from '../../components/Loader/Loader';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
   const { t } = useTranslation();
-  const [likedTickets, setLikedTickets] = useState(() => {
-    const likedItems = localStorage.getItem("likedTickets");
-    return likedItems ? JSON.parse(likedItems) : {};
-  });
-
+  const [likedTickets, setLikedTickets] = useState({});
   const [filteredTickets, setFilteredTickets] = useState([]);
-  const [tickets, setTickets] = useState([]);
+  const [tickets, setTickets] = useState([]); 
   const [soonestTickets, setSoonestTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const currentUser = useSelector((state) => state.auth.user);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -32,16 +30,23 @@ const Home = () => {
         const ticketSnapshot = await getDocs(ticketsCollection);
         const today = new Date();
         const ticketList = [];
-
+    
         for (const docSnap of ticketSnapshot.docs) {
           const ticketData = docSnap.data();
-          const ticketDate = new Date(ticketData.date);
-          if (ticketDate < today) {
-            await deleteDoc(doc(db, 'ticket', docSnap.id));
+          if (ticketData && ticketData.date) {
+            const ticketDate = new Date(ticketData.date);
+            if (ticketDate < today) {
+              await deleteDoc(doc(db, 'ticket', docSnap.id));
+            } else {
+              ticketList.push({ id: docSnap.id, ...ticketData });
+            }
           } else {
-            ticketList.push({ id: docSnap.id, ...ticketData });
+            console.warn('Invalid ticket data:', ticketData);
           }
         }
+
+        console.log(ticketList);
+
         setTickets(ticketList);
         setFilteredTickets(ticketList);
       } catch (error) {
@@ -73,21 +78,42 @@ const Home = () => {
     fetchSoonest();
   }, []);
 
-  const handleLikeTicket = (id) => {
-    setLikedTickets(prev => {
-      const updatedFavorites = {
-        ...prev,
-        [id]: !prev[id]
-      };
-      localStorage.setItem("likedTickets", JSON.stringify(updatedFavorites));
-      return updatedFavorites;
-    });
+  useEffect(() => {
+    const fetchLikedTickets = async () => {
+      if (!currentUser) return;
+
+      const favoritesCollection = collection(db, 'users', currentUser.uid, 'favorites');
+      const favoritesSnapshot = await getDocs(favoritesCollection);
+      const likedItems = {};
+      favoritesSnapshot.docs.forEach(docSnap => {
+        likedItems[docSnap.id] = true;
+      });
+      setLikedTickets(likedItems);
+    };
+
+    fetchLikedTickets();
+  }, [currentUser]);
+
+  const handleLikeTicket = async (ticket) => {
+    const isLiked = !!likedTickets[ticket.id];
+    const updatedFavorites = { ...likedTickets, [ticket.id]: !isLiked };
+
+    setLikedTickets(updatedFavorites);
+
+    if (isLiked) {
+      // Remove from Firestore
+      const favoriteDocRef = doc(db, 'users', currentUser.uid, 'favorites', ticket.id);
+      await deleteDoc(favoriteDocRef);
+    } else {
+      // Add to Firestore
+      const favoriteDocRef = doc(db, 'users', currentUser.uid, 'favorites', ticket.id);
+      await setDoc(favoriteDocRef, ticket);
+    }
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
   const indexOfLastTicket = currentPage * TICKETS_PER_PAGE;
   const indexOfFirstTicket = indexOfLastTicket - TICKETS_PER_PAGE;
   const currentTickets = filteredTickets.slice(indexOfFirstTicket, indexOfLastTicket);
@@ -104,7 +130,7 @@ const Home = () => {
                 key={ticket.id}
                 ticket={ticket}
                 isLiked={!!likedTickets[ticket.id]}
-                onLike={() => handleLikeTicket(ticket.id)}
+                onLike={() => handleLikeTicket(ticket)}
               />
             ))}
           </div>}
@@ -124,12 +150,12 @@ const Home = () => {
                   key={ticket.id}
                   ticket={ticket}
                   isLiked={!!likedTickets[ticket.id]}
-                  onLike={() => handleLikeTicket(ticket.id)}
+                  onLike={() => handleLikeTicket(ticket)}
                 />
               ))
             ) : (
               <div style={{ height: '100px' }}>
-                <h4>{t('noResult')}</h4>
+                <h4>{t('There are no results for your request')}</h4>
               </div>
             )}
           </div>}

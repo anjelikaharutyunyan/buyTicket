@@ -1,34 +1,44 @@
 import { useState, useEffect } from "react";
 import TicketCard from "../../components/TicketCard/TicketCard";
-import { tickets } from "../../components/TicketCard/constants";
+import { db } from '../../firebase/firebase';
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { useSelector } from 'react-redux';
 
 const FavoriteTicket = () => {
-  const [likedTickets, setLikedTickets] = useState([]);
+  const currentUser = useSelector((state) => state.auth.user);
+  const [favoriteTickets, setFavoriteTickets] = useState([]);
 
-  // local storage-ic vercnum em favoritnery
   useEffect(() => {
-    const savedLikes = localStorage.getItem("likedTickets");
-    if (savedLikes) {
-      setLikedTickets(JSON.parse(savedLikes));
+    const fetchFavoriteTickets = async () => {
+      if (!currentUser) return;
+
+      const favoritesCollection = collection(db, 'users', currentUser.uid, 'favorites');
+      const favoritesSnapshot = await getDocs(favoritesCollection);
+      const favoritesList = favoritesSnapshot.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data()
+      }));
+
+      setFavoriteTickets(favoritesList);
+    };
+
+    fetchFavoriteTickets();
+  }, [currentUser]);
+
+  const handleRemoveFavorite = async (ticket) => {
+    if (!currentUser) return;
+
+    try {
+      const favoriteDocRef = doc(db, 'users', currentUser.uid, 'favorites', ticket.id);
+      await deleteDoc(favoriteDocRef);
+
+      setFavoriteTickets(prev => prev.filter(t => t.id !== ticket.id));
+    } catch (error) {
+      console.error('Error removing favorite ticket: ', error);
     }
-  }, []);
-
-  // filtrum em TicketCard/constant -i meji ticketneric vercnum favorite aracnery vor heto nerqevum nkarem ekranin
-  const favoriteTickets = Object.keys(likedTickets)
-  .map(title => tickets.find(ticket => ticket.title === title))
-  
-// favorite-ic hanelu jamanak local storage-ic u favorite bajnic jnjel
-  const handleRemoveLike = (ticket) => {
-    setLikedTickets((prev) => {
-      const updatedFavorites = { ...prev };
-      delete updatedFavorites[ticket.title];
-      localStorage.setItem("likedTickets", JSON.stringify(updatedFavorites));
-      return updatedFavorites;
-    });
   };
-
   return (
-    <div style={{ padding: "20px", position: "relative", top: "32px" }}>
+    <div style={{ padding: "20px", position: "relative", top: "64px" }}>
       <h1 style={{ textAlign: "center" }}>Favorite Tickets</h1>
       <div>
         <div
@@ -44,8 +54,8 @@ const FavoriteTicket = () => {
             <TicketCard
               key={index}
               ticket={ ticket }
-              isLiked={!likedTickets[ticket.title] ? handleRemoveLike(ticket) : true} // bag kar fix areci
-              onLike={() => handleRemoveLike(ticket)}
+              isLiked={true}
+              onLike={() => handleRemoveFavorite(ticket)}
             />
           ))}
         </div>
