@@ -34,15 +34,32 @@ function formatTimestamp(date) {
 }
 const no_available_image = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO5kCepNdhZvDKJtmPAIWnloSdTal7N1CQaA&s'
 
-const TicketCard = ({ ticket, isLiked, onLike }) => {
+const TicketCard = ({ ticket, isLiked, onLike, onCart }) => {
     const formattedDate = formatTimestamp(ticket.date);
     const [favorites, setFavorites] = useState([]);
     const currentUser = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const handleAddToCart = () => {
-        dispatch(addToCart());
+    const handleAddToCart = async () => {
+        if (!currentUser) {
+            navigate("/login");
+            return;
+        }
+        try {
+            dispatch(addToCart());
+            const cartRef = doc(
+                db,
+                "users",
+                currentUser.uid,
+                "cart",
+                ticket.id
+            );
+            await setDoc(cartRef, ticket);
+            onCart(ticket);
+        } catch (error) {
+            console.error("Error adding to cart: ", error);
+        }
     };
 
     const handleLike = async () => {
