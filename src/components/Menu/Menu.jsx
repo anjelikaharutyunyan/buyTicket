@@ -25,6 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase/firebase';
 import { ShoppingCart } from '@mui/icons-material';
 import CartPortal from '../CartPortal/CartPortal';
+import { useState } from 'react';
 
 const drawerWidth = 240;
 
@@ -32,10 +33,11 @@ const Menu = (props) => {
   const { i18n } = useTranslation();
   const { t } = useTranslation();
   const { window } = props;
-  const [language, setLanguage] = React.useState('en');
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [cartOpen, setCartOpen] = React.useState(false);
+  const [language, setLanguage] = useState('en');
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const navigate = useNavigate();
+  const cartCount = useSelector((state) => state.cart.count);
 
   const handleClick = () => {
     navigate('/');
@@ -162,9 +164,7 @@ const Menu = (props) => {
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <IconButton aria-label="cart">
-                <Badge color="primary"
-                //  badgeContent={cartCount}
-                 >
+                <Badge sx={{ color: 'white' }} badgeContent={cartCount}>
                   <ShoppingCart sx={{ color: 'white' }} onClick={() => handleCartOpen()} />
                 </Badge>
               </IconButton>

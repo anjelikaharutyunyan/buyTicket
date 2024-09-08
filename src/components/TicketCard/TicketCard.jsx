@@ -9,15 +9,16 @@ import {
     getDocs,
     query,
     setDoc,
-  } from "firebase/firestore";
-  import { useSelector } from "react-redux";
-  import { useEffect, useState } from "react";
-  import { db } from "../../firebase/firebase";
-  import { useNavigate } from "react-router-dom";
+} from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { db } from "../../firebase/firebase";
+import { useNavigate } from "react-router-dom";
+import { addToCart } from '../../Store/cartSlice';
 
 function formatTimestamp(date) {
     if (date instanceof Timestamp) {
-        date = date.toDate();  
+        date = date.toDate();
     }
     if (date instanceof Date) {
         return date.toLocaleString('hy-AM', {
@@ -34,48 +35,53 @@ function formatTimestamp(date) {
 const no_available_image = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO5kCepNdhZvDKJtmPAIWnloSdTal7N1CQaA&s'
 
 const TicketCard = ({ ticket, isLiked, onLike }) => {
-    const formattedDate = formatTimestamp(ticket.date); 
+    const formattedDate = formatTimestamp(ticket.date);
     const [favorites, setFavorites] = useState([]);
     const currentUser = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleAddToCart = () => {
+        dispatch(addToCart());
+    };
 
     const handleLike = async () => {
         if (!currentUser) {
-        navigate("/login");
-        return;
+            navigate("/login");
+            return;
         }
 
         try {
-        const favoritesRef = doc(
-            db,
-            "users",
-            currentUser.uid,
-            "favorites",
-            ticket.id
-        );
-        await setDoc(favoritesRef, ticket);
-        onLike(ticket); // Update the like state if needed
+            const favoritesRef = doc(
+                db,
+                "users",
+                currentUser.uid,
+                "favorites",
+                ticket.id
+            );
+            await setDoc(favoritesRef, ticket);
+            onLike(ticket); // Update the like state if needed
         } catch (error) {
-        console.error("Error adding to favorites: ", error);
+            console.error("Error adding to favorites: ", error);
         }
-    }; 
+    };
 
     useEffect(() => {
         const fetchFavorites = async () => {
-        if (!currentUser) return;
+            if (!currentUser) return;
 
-        const favoritesRef = collection(
-            db,
-            "users",
-            currentUser.uid,
-            "favorites"
-        );
-        const q = query(favoritesRef);
+            const favoritesRef = collection(
+                db,
+                "users",
+                currentUser.uid,
+                "favorites"
+            );
+            const q = query(favoritesRef);
 
-        const querySnapshot = await getDocs(q);
-        const favoriteTickets = querySnapshot.docs.map((doc) => doc.data());
+            const querySnapshot = await getDocs(q);
+            const favoriteTickets = querySnapshot.docs.map((doc) => doc.data());
 
-        setFavorites(favoriteTickets);
+            setFavorites(favoriteTickets);
         };
 
         fetchFavorites();
@@ -94,7 +100,7 @@ const TicketCard = ({ ticket, isLiked, onLike }) => {
                     {ticket.title || 'title'}
                 </Typography>
                 <Typography variant="body2" color="text.primary">
-                    {formattedDate} 
+                    {formattedDate}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     {ticket.description || 'event description'}
@@ -106,8 +112,8 @@ const TicketCard = ({ ticket, isLiked, onLike }) => {
                     <IconButton onClick={handleLike} sx={{ mt: 2 }}>
                         {isLiked ? <Favorite color="error" /> : <FavoriteBorder />}
                     </IconButton>
-                    <IconButton sx={{ mt: 2 }}>
-                        <ShoppingCart/>
+                    <IconButton sx={{ mt: 2 }} onClick={handleAddToCart}>
+                        <ShoppingCart />
                     </IconButton>
                 </div>
             </CardContent>
