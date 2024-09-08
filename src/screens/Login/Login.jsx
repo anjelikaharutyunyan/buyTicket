@@ -35,6 +35,7 @@ const Login = () => {
       });
 
       dispatch(login({ email: user.email, uid: user.uid, name: name }));
+      navigate('/');
       setError('');
     } catch (error) {
       setError(error.message);
@@ -61,6 +62,7 @@ const Login = () => {
     try {
       await signOut(auth);
       dispatch(logout());
+      navigate('/login');
     } catch (error) {
       setError(error.message);
     }

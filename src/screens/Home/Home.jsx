@@ -14,12 +14,12 @@ import { useSelector } from 'react-redux';
 const Home = () => {
   const { t } = useTranslation();
   const [likedTickets, setLikedTickets] = useState({});
+  const [addedTickets, setAddedTickets] = useState({});
   const [filteredTickets, setFilteredTickets] = useState([]);
-  const [tickets, setTickets] = useState([]); 
+  const [tickets, setTickets] = useState([]);
   const [soonestTickets, setSoonestTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentUser = useSelector((state) => state.auth.user);
-
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Home = () => {
         const ticketSnapshot = await getDocs(ticketsCollection);
         const today = new Date();
         const ticketList = [];
-    
+
         for (const docSnap of ticketSnapshot.docs) {
           const ticketData = docSnap.data();
           if (ticketData && ticketData.date) {
@@ -44,9 +44,6 @@ const Home = () => {
             console.warn('Invalid ticket data:', ticketData);
           }
         }
-
-        console.log(ticketList);
-
         setTickets(ticketList);
         setFilteredTickets(ticketList);
       } catch (error) {
@@ -111,6 +108,18 @@ const Home = () => {
     }
   };
 
+  const handleAddToCart = async (ticket) => {
+    const isAddedToCart = !!addedTickets[ticket.id];
+    const updatedFavorites = { ...addedTickets, [ticket.id]: !isAddedToCart };
+
+    setAddedTickets(updatedFavorites);
+
+    if (isAddedToCart) {
+      const favoriteDocRef = doc(db, 'users', currentUser.uid, 'cart', ticket.id);
+      await setDoc(favoriteDocRef, ticket);
+    }
+  };
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -131,6 +140,8 @@ const Home = () => {
                 ticket={ticket}
                 isLiked={!!likedTickets[ticket.id]}
                 onLike={() => handleLikeTicket(ticket)}
+                isAddedToCart = {!!addedTickets[ticket.id]}
+                onCart = {() => handleAddToCart(ticket)}
               />
             ))}
           </div>}
@@ -151,6 +162,7 @@ const Home = () => {
                   ticket={ticket}
                   isLiked={!!likedTickets[ticket.id]}
                   onLike={() => handleLikeTicket(ticket)}
+                  onCart={() => handleAddToCart(ticket)}
                 />
               ))
             ) : (

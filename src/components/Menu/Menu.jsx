@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { Link, } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
-
 import { theme } from '../../constants';
-
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Button from '@mui/material/Button';
@@ -12,7 +10,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
-import { MenuItem, Select, ThemeProvider } from '@mui/material';
+import { Badge, MenuItem, Select, ThemeProvider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -24,7 +22,10 @@ import logo from './logo.png'
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
+import { ShoppingCart } from '@mui/icons-material';
+import CartPortal from '../CartPortal/CartPortal';
+import { useState } from 'react';
+import { auth } from '../../firebase/firebase';
 
 
 const drawerWidth = 240;
@@ -33,13 +34,16 @@ const Menu = (props) => {
   const { i18n } = useTranslation();
   const { t } = useTranslation();
   const { window } = props;
-  const [language, setLanguage] = React.useState('en');
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [language, setLanguage] = useState('en');
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const navigate = useNavigate();
+  const cartCount = useSelector((state) => state.cart.count);
 
   const handleClick = () => {
     navigate('/');
   };
+
   const navItems = [
     { screen: t('home'), to: '/' },
     { screen: t('aboutUs'), to: '/aboutUs' },
@@ -55,13 +59,22 @@ const Menu = (props) => {
     setLanguage(selectedLanguage);
   };
 
-  // es hatvachy redux toolkiti hamar e
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());
   };
+
+  const handleCartOpen = () => {
+    setCartOpen(true);
+  };
+
+  const handleCartClose = () => {
+    setCartOpen(false);
+  };
+
+
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -79,7 +92,7 @@ const Menu = (props) => {
             </ListItem>
           </Link>
         ))}
-        {/* stex nerqwvoum poxel em chyc ta "Favorite Ticket" ka te voch */}
+
         {isLoggedIn && (
           <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItem disablePadding>
@@ -136,15 +149,14 @@ const Menu = (props) => {
                   </Link>
                 </Button>
               ))}
-              {/* stex el knopken chyc ta te voch */}
-              {isLoggedIn && (
+              {isLoggedIn && auth.currentUser.uid !== 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('favoriteTicket')}
                   </Link>
                 </Button>
               )}
-              {isLoggedIn && (
+              {isLoggedIn && auth.currentUser.uid === 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('ticket')}
@@ -153,7 +165,13 @@ const Menu = (props) => {
               )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton sx={{ color: '#fff', }}>
+              {isLoggedIn && auth.currentUser.uid !== 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && <IconButton aria-label="cart">
+                <Badge sx={{ color: 'white' }} badgeContent={cartCount}>
+                  <ShoppingCart sx={{ color: 'white' }} onClick={() => handleCartOpen()} />
+                </Badge>
+              </IconButton>
+              }
+              <IconButton sx={{ color: '#fff' }}>
                 <LanguageIcon />
               </IconButton>
               <Select
@@ -170,7 +188,12 @@ const Menu = (props) => {
               </Select>
               <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
                 {isLoggedIn ? (
-                  <p>{user.name} {t('logout')}</p>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <Box> {user.name} </Box>
+                    <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {t('logout')}
+                    </Link>
+                  </div>
                 ) : (
                   <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('login')}
@@ -197,6 +220,7 @@ const Menu = (props) => {
             {drawer}
           </Drawer>
         </nav>
+        <CartPortal open={cartOpen} onClose={handleCartClose} />
       </Box>
     </ThemeProvider>
   );
