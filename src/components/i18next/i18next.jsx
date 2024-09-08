@@ -28,7 +28,7 @@ const resources = {
             name: 'Name',
             password: 'Password',
             ticket: 'ticket',
-            favoriteTicket: 'Favorite Ticket',
+            favoriteTicket: 'Favorite Tickets',
             allRights: 'All rights reserved.',
             logout: 'Logout',
             ourTeam: 'Our Team',
@@ -72,7 +72,7 @@ const resources = {
             name: 'Անուն',
             password: 'Գաղտնաբառ',
             ticket: 'Տոմս',
-            favoriteTicket: 'Սիրելի տոմս',
+            favoriteTicket: 'Հավանած տոմսեր',
             allRights: 'Բոլոր իրավունքները պաշտպանված են։',
             ourTeam: 'Մեր թիմը',
             founderName: 'Ջո Դո',
@@ -85,7 +85,8 @@ const resources = {
             image: 'Նկարի URL',
             price: 'Գին',
             date: 'Ամսաթիվ',
-            submit: 'Ուղարկել'
+            submit: 'Ուղարկել',
+            logout: 'Ելք'
         },
     },
     ru: {
@@ -113,7 +114,7 @@ const resources = {
             aboutText: 'Мы стремимся предоставлять лучшие услуги по продаже билетов. Наша платформа обеспечивает бесперебойный процесс поиска и покупки билетов на различные мероприятия. Мы привержены качеству и удовлетворенности клиентов.',
             password: 'Пароль',
             ticket: 'Билет',
-            favoriteTicket: 'Избранный билет',
+            favoriteTicket: 'Избранные билеты',
             allRights: 'Все права защищены.',
             email: 'Электронная почта',
             name: 'Имя',
@@ -128,7 +129,8 @@ const resources = {
             image: 'URL изображения',
             price: 'Цена',
             date: 'Дата',
-            submit: 'Отправить'
+            submit: 'Отправить',
+            logout: 'Выход',
         }
     }
 

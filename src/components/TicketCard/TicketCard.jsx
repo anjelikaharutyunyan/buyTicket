@@ -58,7 +58,7 @@ const TicketCard = ({ ticket, isLiked, onLike }) => {
         } catch (error) {
         console.error("Error adding to favorites: ", error);
         }
-    };
+    }; 
 
     useEffect(() => {
         const fetchFavorites = async () => {
@@ -107,7 +107,7 @@ const TicketCard = ({ ticket, isLiked, onLike }) => {
                         {isLiked ? <Favorite color="error" /> : <FavoriteBorder />}
                     </IconButton>
                     <IconButton sx={{ mt: 2 }}>
-                        <ShoppingCart />
+                        <ShoppingCart/>
                     </IconButton>
                 </div>
             </CardContent>
