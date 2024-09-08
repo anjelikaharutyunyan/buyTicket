@@ -21,6 +21,7 @@ function formatTimestamp(date) {
 
 const CartTicket = ({ ticket, onRemove }) => {
     const formattedDate = formatTimestamp(ticket.date);
+
     return (
         <Card sx={{ width: '100%', mb: 2 }}>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
@@ -33,7 +34,6 @@ const CartTicket = ({ ticket, onRemove }) => {
                     />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-
                     <Typography sx={{ fontSize: '14px', fontWeight: '700' }}>
                         {ticket.title}
                     </Typography>
@@ -45,7 +45,7 @@ const CartTicket = ({ ticket, onRemove }) => {
                     </Typography>
                 </div>
                 <div style={{ paddingBottom: '50px', paddingRight: '5px' }}>
-                    <CloseIcon onClick={onRemove}/>
+                    <CloseIcon onClick={() => onRemove(ticket)} />
                 </div>
             </div>
         </Card>

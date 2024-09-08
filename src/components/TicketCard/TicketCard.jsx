@@ -77,7 +77,7 @@ const TicketCard = ({ ticket, isLiked, onLike, onCart }) => {
                 ticket.id
             );
             await setDoc(favoritesRef, ticket);
-            onLike(ticket); // Update the like state if needed
+            onLike(ticket);
         } catch (error) {
             console.error("Error adding to favorites: ", error);
         }

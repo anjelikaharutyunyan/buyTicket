@@ -22,10 +22,11 @@ import logo from './logo.png'
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase/firebase';
 import { ShoppingCart } from '@mui/icons-material';
 import CartPortal from '../CartPortal/CartPortal';
 import { useState } from 'react';
+import { auth } from '../../firebase/firebase';
+
 
 const drawerWidth = 240;
 
@@ -72,6 +73,7 @@ const Menu = (props) => {
   const handleCartClose = () => {
     setCartOpen(false);
   };
+
 
 
   const drawer = (
@@ -147,7 +149,7 @@ const Menu = (props) => {
                   </Link>
                 </Button>
               ))}
-              {isLoggedIn && (
+              {isLoggedIn && auth.currentUser.uid !== 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('favoriteTicket')}
@@ -163,11 +165,12 @@ const Menu = (props) => {
               )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton aria-label="cart">
+              {isLoggedIn && auth.currentUser.uid !== 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && <IconButton aria-label="cart">
                 <Badge sx={{ color: 'white' }} badgeContent={cartCount}>
                   <ShoppingCart sx={{ color: 'white' }} onClick={() => handleCartOpen()} />
                 </Badge>
               </IconButton>
+              }
               <IconButton sx={{ color: '#fff' }}>
                 <LanguageIcon />
               </IconButton>
