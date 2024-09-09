@@ -10,7 +10,9 @@ const cartSlice = createSlice({
             state.count += 1;
         },
         removeFromCart: (state) => {
-            state.count -= 1; 
+            if (state.count > 0) {
+                state.count -= 1;
+            }
         },
         setCartCount: (state, action) => {
             state.count = action.payload;

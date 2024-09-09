@@ -7,7 +7,7 @@ import { collection, deleteDoc, doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import Loader from '../Loader/Loader';
 import CartTicket from './CartTicket';
-import { removeFromCart } from '../../Store/cartSlice';
+import { removeFromCart, setCartCount } from '../../Store/cartSlice';
 
 
 const CartPortal = ({ open, onClose }) => {
@@ -35,6 +35,10 @@ const CartPortal = ({ open, onClose }) => {
 
     return () => unsubscribe();
   }, [currentUser]);
+
+  useEffect(() => {
+    dispatch(setCartCount(cartItems.length))
+  }, [cartItems])
 
   const handleRemoveCartItem = async (ticket) => {
     if (!currentUser) return;
@@ -76,6 +80,8 @@ const CartPortal = ({ open, onClose }) => {
       </Typography>
       {loading ? <Loader /> : (
         <Box>
+          {console.log(cartItems.length, 'length')}
+
           {cartItems.length > 0 ? (
             cartItems.map((ticket) => (
               <CartTicket
