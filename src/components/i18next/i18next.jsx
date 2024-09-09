@@ -43,6 +43,7 @@ const resources = {
             price: 'Price',
             date: 'Date',
             submit: 'Submit',
+            statistic: 'Statistic',
         },
     },
     hy: {
@@ -86,7 +87,8 @@ const resources = {
             price: 'Գին',
             date: 'Ամսաթիվ',
             submit: 'Ուղարկել',
-            logout: 'Ելք'
+            logout: 'Ելք',
+            statistic: 'Վիճակագրություն',
         },
     },
     ru: {
@@ -131,6 +133,7 @@ const resources = {
             date: 'Дата',
             submit: 'Отправить',
             logout: 'Выход',
+            statistic: 'Статистика',
         }
     }
 

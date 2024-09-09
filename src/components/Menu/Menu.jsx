@@ -75,7 +75,6 @@ const Menu = (props) => {
   };
 
 
-
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
@@ -94,22 +93,29 @@ const Menu = (props) => {
         ))}
 
         {isLoggedIn && (
-          <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <ListItem disablePadding>
-              <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-                <ListItemText primary="Favorite Ticket" />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-        )}
-        {isLoggedIn && (
-          <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <ListItem disablePadding>
-              <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-                <ListItemText primary="Ticket" />
-              </ListItemButton>
-            </ListItem>
-          </Link>
+          <>
+            <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <ListItem disablePadding>
+                <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
+                  <ListItemText primary="Favorite Ticket" />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+            <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <ListItem disablePadding>
+                <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
+                  <ListItemText primary="Ticket" />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+            <Link to="/statistic" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <ListItem disablePadding>
+                <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
+                  <ListItemText primary="Statistic" />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          </>
         )}
       </List>
       <Divider />
@@ -157,11 +163,18 @@ const Menu = (props) => {
                 </Button>
               )}
               {isLoggedIn && auth.currentUser.uid === 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
+                <>
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('ticket')}
                   </Link>
                 </Button>
+                <Button sx={{ color: '#fff', px: 2 }}>
+                  <Link to="/statistic" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {t('statistic')}
+                  </Link>
+                </Button>
+                </>
               )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -171,6 +184,7 @@ const Menu = (props) => {
                 </Badge>
               </IconButton>
               }
+               </Box>
               <IconButton sx={{ color: '#fff' }}>
                 <LanguageIcon />
               </IconButton>
@@ -200,7 +214,7 @@ const Menu = (props) => {
                   </Link>
                 )}
               </Button>
-            </Box>
+           
           </Toolbar>
         </AppBar>
         <nav>
