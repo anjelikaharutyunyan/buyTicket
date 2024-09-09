@@ -10,6 +10,7 @@ import FavoriteTicket from './screens/FavoriteTicket/FavoriteTicket'
 import Footer from './screens/AboutUs/Footer';
 
 import './components/i18next/i18next';
+import Statistics from './screens/Statistics/Statistics';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/ticket" element={<Ticket />} />
+        <Route path="/statistic" element={<Statistics />} />
         <Route path="/favoriteTicket" element={<FavoriteTicket />} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/login" element={<Login />} />
