@@ -3,19 +3,13 @@ import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { theme } from '../../constants';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
 import Button from '@mui/material/Button';
-import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import { Badge, MenuItem, Select, ThemeProvider } from '@mui/material';
+import { Badge, InputAdornment, MenuItem, OutlinedInput, Select, ThemeProvider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import CssBaseline from '@mui/material/CssBaseline';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../store/authSlice';
 import logo from './logo.png'
@@ -26,9 +20,7 @@ import { ShoppingCart } from '@mui/icons-material';
 import CartPortal from '../CartPortal/CartPortal';
 import { useState } from 'react';
 import { auth } from '../../firebase/firebase';
-
-
-const drawerWidth = 240;
+import NavDrawer from './Drawer';
 
 const Menu = (props) => {
   const { i18n } = useTranslation();
@@ -74,59 +66,6 @@ const Menu = (props) => {
     setCartOpen(false);
   };
 
-
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
-        <img src={logo} alt='Logo' style={{ width: '200px', marginTop: '5px' }} />
-      </Box>
-      <Divider />
-      <List>
-        {navItems.map((item) => (
-          <Link key={item.to} to={item.to} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <ListItem disablePadding>
-              <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-                <ListItemText primary={item.screen} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-        ))}
-
-        {isLoggedIn && (
-          <>
-            <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <ListItem disablePadding>
-                <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-                  <ListItemText primary="Favorite Ticket" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <ListItem disablePadding>
-                <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-                  <ListItemText primary="Ticket" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            <Link to="/statistic" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <ListItem disablePadding>
-                <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-                  <ListItemText primary="Statistic" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          </>
-        )}
-      </List>
-      <Divider />
-      <Link to={isLoggedIn ? '/' : '/login'} style={{ textDecoration: 'none' }}>
-        <Button sx={{ width: '100%', mt: 2 }}>
-          {isLoggedIn ? 'Home' : 'Login'}
-        </Button>
-      </Link>
-    </Box>
-  );
-
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
@@ -164,16 +103,16 @@ const Menu = (props) => {
               )}
               {isLoggedIn && auth.currentUser.uid === 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
                 <>
-                <Button sx={{ color: '#fff', px: 2 }}>
-                  <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {t('ticket')}
-                  </Link>
-                </Button>
-                <Button sx={{ color: '#fff', px: 2 }}>
-                  <Link to="/statistic" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {t('statistic')}
-                  </Link>
-                </Button>
+                  <Button sx={{ color: '#fff', px: 2 }}>
+                    <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {t('ticket')}
+                    </Link>
+                  </Button>
+                  <Button sx={{ color: '#fff', px: 2 }}>
+                    <Link to="/statistic" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {t('statistic')}
+                    </Link>
+                  </Button>
                 </>
               )}
             </Box>
@@ -184,55 +123,51 @@ const Menu = (props) => {
                 </Badge>
               </IconButton>
               }
-               </Box>
-              <IconButton sx={{ color: '#fff' }}>
-                <LanguageIcon />
-              </IconButton>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={language}
-                label="Language"
-                style={{ background: '#F9BE32', border: 'none', color: 'white', fontSize: '16px' }}
-                onChange={handleLanguageChange}
-              >
-                <MenuItem value='en'>{t('english')}</MenuItem>
-                <MenuItem value='ru'>{t('russian')}</MenuItem>
-                <MenuItem value='hy'>{t('armenian')}</MenuItem>
-              </Select>
-              <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
-                {isLoggedIn ? (
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    <Box> {user.name} </Box>
-                    <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      {t('logout')}
-                    </Link>
-                  </div>
-                ) : (
+            </Box>
+            <Select
+              labelId="demo-simple-select-label"
+              id="language-select"
+              value={language}
+              onChange={handleLanguageChange}
+              input={
+                <OutlinedInput
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <LanguageIcon style={{ color: '#fff' }} />
+                    </InputAdornment>
+                  }
+                  sx={{ background: '#F9BE32', border: 'none', color: 'white', fontSize: '16px' }}
+                />
+              }
+            >
+              <MenuItem value="en">{t('english')}</MenuItem>
+              <MenuItem value="ru">{t('russian')}</MenuItem>
+              <MenuItem value="hy">{t('armenian')}</MenuItem>
+            </Select>
+            <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
+              {isLoggedIn ? (
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <Box> {user.name} </Box>
                   <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {t('login')}
+                    {t('logout')}
                   </Link>
-                )}
-              </Button>
-           
+                </div>
+              ) : (
+                <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {t('login')}
+                </Link>
+              )}
+            </Button>
           </Toolbar>
         </AppBar>
         <nav>
-          <Drawer
+          <NavDrawer
             container={container}
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true,
-            }}
-            sx={{
-              display: { xs: 'block', sm: 'none' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-            }}
-          >
-            {drawer}
-          </Drawer>
+            mobileOpen={mobileOpen}
+            handleDrawerToggle={handleDrawerToggle}
+            navItems={navItems}
+            isLoggedIn={isLoggedIn}
+          />
         </nav>
         <CartPortal open={cartOpen} onClose={handleCartClose} />
       </Box>

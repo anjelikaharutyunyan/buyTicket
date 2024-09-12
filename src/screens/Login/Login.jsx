@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 
-
 const Login = () => {
   const { t } = useTranslation();
   const [isRegistering, setIsRegistering] = useState(true);
@@ -35,7 +34,7 @@ const Login = () => {
       });
 
       dispatch(login({ email: user.email, uid: user.uid, name: name }));
-      navigate('/');
+      // navigate('/');
       setError('');
     } catch (error) {
       setError(error.message);
@@ -52,7 +51,7 @@ const Login = () => {
 
       dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
       setError('');
-      navigate('/');
+      // navigate('/');
     } catch (error) {
       setError('Invalid email or password');
     }
@@ -69,10 +68,8 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="sm" style={{marginTop: '150px'}}>
-      <Box sx={{ mt: 4 }}>
-        <Box sx={{ mb: 11 }}>
-        </Box>
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 14, mb: 5 }}>
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
             <Box>

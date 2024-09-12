@@ -32,29 +32,51 @@ function formatTimestamp(date) {
     }
     return 'dd.mm.yyyy';
 }
-const no_available_image = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO5kCepNdhZvDKJtmPAIWnloSdTal7N1CQaA&s'
 
-const TicketCard = ({ ticket, isLiked, onLike, onCart }) => {
+const no_available_image = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO5kCepNdhZvDKJtmPAIWnloSdTal7N1CQaA&s';
+
+const TicketCard = ({ ticket, isLiked, onLike, onCart, handleOpenModal }) => {
     const formattedDate = formatTimestamp(ticket.date);
     const [favorites, setFavorites] = useState([]);
+    const [pendingAction, setPendingAction] = useState(null);
     const currentUser = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        const fetchFavorites = async () => {
+            if (!currentUser) return;
+
+            const favoritesRef = collection(db, "users", currentUser.uid, "favorites");
+            const q = query(favoritesRef);
+            const querySnapshot = await getDocs(q);
+            const favoriteTickets = querySnapshot.docs.map((doc) => doc.data());
+            setFavorites(favoriteTickets);
+        };
+
+        fetchFavorites();
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (currentUser && pendingAction) {
+            if (pendingAction.type === 'addToCart') {
+                handleAddToCart();
+            } else if (pendingAction.type === 'addToFavorites') {
+                handleLike();
+            }
+            setPendingAction(null);
+        }
+    }, [currentUser, pendingAction]);
+
     const handleAddToCart = async () => {
         if (!currentUser) {
-            navigate("/login");
+            setPendingAction({ type: 'addToCart' });
+            handleOpenModal();
             return;
         }
         try {
             dispatch(addToCart());
-            const cartRef = doc(
-                db,
-                "users",
-                currentUser.uid,
-                "cart",
-                ticket.id
-            );
+            const cartRef = doc(db, "users", currentUser.uid, "cart", ticket.id);
             await setDoc(cartRef, ticket);
             onCart(ticket);
         } catch (error) {
@@ -64,45 +86,18 @@ const TicketCard = ({ ticket, isLiked, onLike, onCart }) => {
 
     const handleLike = async () => {
         if (!currentUser) {
-            navigate("/login");
+            setPendingAction({ type: 'addToFavorites' });
+            handleOpenModal();
             return;
         }
-
         try {
-            const favoritesRef = doc(
-                db,
-                "users",
-                currentUser.uid,
-                "favorites",
-                ticket.id
-            );
+            const favoritesRef = doc(db, "users", currentUser.uid, "favorites", ticket.id);
             await setDoc(favoritesRef, ticket);
             onLike(ticket);
         } catch (error) {
             console.error("Error adding to favorites: ", error);
         }
     };
-
-    useEffect(() => {
-        const fetchFavorites = async () => {
-            if (!currentUser) return;
-
-            const favoritesRef = collection(
-                db,
-                "users",
-                currentUser.uid,
-                "favorites"
-            );
-            const q = query(favoritesRef);
-
-            const querySnapshot = await getDocs(q);
-            const favoriteTickets = querySnapshot.docs.map((doc) => doc.data());
-
-            setFavorites(favoriteTickets);
-        };
-
-        fetchFavorites();
-    }, [currentUser]);
 
     return (
         <Card sx={{ width: 270, mb: 2 }}>
