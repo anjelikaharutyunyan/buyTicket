@@ -28,6 +28,8 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const modalRef = useRef(null);
 
+  const ORANGE_COLOR = '#f9be32';
+
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -191,7 +193,7 @@ const Home = () => {
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '60px' }}>
-          <SearchAppBar onSearch={setFilteredTickets} />
+          <SearchAppBar style={{ backgroundColor: ORANGE_COLOR }} onSearch={setFilteredTickets} />
           <BasicSelect filteredTickets={filteredTickets} setFilteredTickets={setFilteredTickets} />
         </div>
         <Modal ref={modalRef}>

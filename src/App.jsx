@@ -4,14 +4,12 @@ import Home from './screens/Home/Home'
 import Login from './screens/Login/Login'
 import Menu from "./components/Menu/Menu"
 import Ticket from './screens/Ticket/Ticket'
-
 import AboutUs from './screens/AboutUs/AboutUs'
 import FavoriteTicket from './screens/FavoriteTicket/FavoriteTicket'
-
-
 import './components/i18next/i18next';
 import Statistics from './screens/Statistics/Statistics';
 import Footer from './components/Footer/Footer';
+
 
 const App = () => {
   return (

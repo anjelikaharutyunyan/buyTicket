@@ -1,20 +1,25 @@
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import Favorite from '@mui/icons-material/Favorite';
 import { Timestamp } from 'firebase/firestore';
-import {
-    collection,
-    doc,
-    getDocs,
-    query,
-    setDoc,
-} from "firebase/firestore";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { db } from "../../firebase/firebase";
-import { useNavigate } from "react-router-dom";
+import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { db } from '../../firebase/firebase';
 import { addToCart } from '../../Store/cartSlice';
+import { styled } from '@mui/material/styles';
+
+const StyledCard = styled(Card)(({ theme }) => ({
+    width: 270,
+    marginBottom: theme.spacing(2),
+    transition: 'transform 0.3s ease',
+    '&:hover': {
+        transform: 'scale(1.05)', // Scale card by 5% on hover
+    },
+    cursor: 'pointer',
+}));
 
 function formatTimestamp(date) {
     if (date instanceof Timestamp) {
@@ -100,7 +105,7 @@ const TicketCard = ({ ticket, isLiked, onLike, onCart, handleOpenModal }) => {
     };
 
     return (
-        <Card sx={{ width: 270, mb: 2 }}>
+        <StyledCard>
             <CardMedia
                 component="img"
                 height="140"
@@ -129,7 +134,7 @@ const TicketCard = ({ ticket, isLiked, onLike, onCart, handleOpenModal }) => {
                     </IconButton>
                 </div>
             </CardContent>
-        </Card>
+        </StyledCard>
     );
 };
 
