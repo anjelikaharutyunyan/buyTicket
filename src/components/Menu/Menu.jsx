@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../store/authSlice';
-import logo from './logo.png'
+import logo from './logo.png';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -67,6 +67,9 @@ const Menu = (props) => {
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
+
+  // Define colors based on some conditions
+  const selectColor = '#F9BE32'; // Example color; adjust as needed
 
   return (
     <ThemeProvider theme={theme}>
@@ -136,7 +139,7 @@ const Menu = (props) => {
                       <LanguageIcon style={{ color: '#fff' }} />
                     </InputAdornment>
                   }
-                  sx={{ background: '#F9BE32', border: 'none', color: 'white', fontSize: '16px' }}
+                  sx={{ background: selectColor, border: 'none', color: 'white', fontSize: '16px' }}
                 />
               }
             >

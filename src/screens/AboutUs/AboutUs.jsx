@@ -30,13 +30,35 @@ const AboutUs = () => {
         >
           <h1>{t('aboutUs')}</h1>
           <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
-            {t('aboutText')}
+            {t('welcomeText')}
+          </p>
+          <h2>{t('ourMission')}</h2>
+          <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
+            {t('missionText')}
+          </p>
+          <h2>{t('whyChooseUs')}</h2>
+          <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
+            {t('comprehensiveListings')}
           </p>
           <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
-            {t('aboutText')}
+            {t('secureTransactions')}
           </p>
           <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
-            {t('aboutText')}
+            {t('exceptionalSupport')}
+          </p>
+          <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
+            {t('exclusiveOffers')}
+          </p>
+          <h2>{t('ourCommitment')}</h2>
+          <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
+            {t('commitmentText')}
+          </p>
+          <h2>{t('joinUs')}</h2>
+          <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
+            {t('joinUsText')}
+          </p>
+          <p style={{ fontSize: "18px", lineHeight: "1.6" }}>
+            {t('thankYou')}
           </p>
         </div>
       </div>
@@ -67,8 +89,8 @@ const AboutUs = () => {
               alt="Team Member 1"
               style={{ width: "150px", height: "150px", borderRadius: "50%" }}
             />
-            <p> {t('founderName')}</p>
-            <p> {t('founderCEO')}</p>
+            <p>{t('founderName')}</p>
+            <p>{t('founderCEO')}</p>
           </div>
           <div style={{ textAlign: "center" }}>
             <img
@@ -77,7 +99,7 @@ const AboutUs = () => {
               style={{ width: "150px", height: "150px", borderRadius: "50%" }}
             />
             <p>{t('chiefName')}</p>
-            <p> {t('chief')}</p>
+            <p>{t('chief')}</p>
           </div>
         </div>
       </div>

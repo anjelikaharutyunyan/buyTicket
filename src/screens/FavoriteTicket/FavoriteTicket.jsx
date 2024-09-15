@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import TicketCard from "../../components/TicketCard/TicketCard";
+import { useState, useEffect } from 'react';
+import TicketCard from '../../components/TicketCard/TicketCard';
 import { db } from '../../firebase/firebase';
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
-import Loader from "../../components/Loader/Loader";
+import Loader from '../../components/Loader/Loader';
 
 const FavoriteTicket = () => {
   const currentUser = useSelector((state) => state.auth.user);
@@ -45,6 +45,7 @@ const FavoriteTicket = () => {
       console.error('Error removing favorite ticket: ', error);
     }
   };
+
   return (
     <div style={{ padding: "20px", position: "relative", top: "64px" }}>
       <h1 style={{ textAlign: "center" }}>Favorite Tickets</h1>
@@ -67,7 +68,6 @@ const FavoriteTicket = () => {
             />
           ))}
         </div>}
-
       </div>
     </div>
   );

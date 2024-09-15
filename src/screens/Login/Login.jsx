@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 
+const ORANGE_COLOR = '#f9be32';
+
 const Login = () => {
   const { t } = useTranslation();
   const [isRegistering, setIsRegistering] = useState(true);
@@ -17,7 +19,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
@@ -34,8 +35,8 @@ const Login = () => {
       });
 
       dispatch(login({ email: user.email, uid: user.uid, name: name }));
-      // navigate('/');
       setError('');
+      navigate('/');
     } catch (error) {
       setError(error.message);
     }
@@ -51,7 +52,7 @@ const Login = () => {
 
       dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
       setError('');
-      // navigate('/');
+      navigate('/');
     } catch (error) {
       setError('Invalid email or password');
     }
@@ -72,8 +73,8 @@ const Login = () => {
       <Box sx={{ mt: 14, mb: 5 }}>
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
-            <Box>
-              <Typography variant="h4">{isRegistering ? t('signUp') : t('login')}</Typography>
+            <Box sx={{ width: '100%' }}>
+              <Typography variant="h4" sx={{ color: ORANGE_COLOR }}>{isRegistering ? t('signUp') : t('login')}</Typography>
               {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
               {isRegistering && (
                 <TextField
@@ -83,6 +84,7 @@ const Login = () => {
                   fullWidth
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  sx={{ mt: 2 }}
                 />
               )}
               <TextField
@@ -92,6 +94,7 @@ const Login = () => {
                 fullWidth
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                sx={{ mt: 2 }}
               />
               <TextField
                 label={t('password')}
@@ -101,28 +104,28 @@ const Login = () => {
                 fullWidth
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                sx={{ mt: 2 }}
               />
               <Button
                 variant="contained"
-                color="primary"
+                sx={{ mt: 2, backgroundColor: ORANGE_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
                 fullWidth
                 onClick={isRegistering ? handleRegister : handleLogin}
-                sx={{ mt: 2 }}
               >
                 {isRegistering ? t('signUp') : t('login')}
               </Button>
               <Button
                 variant="text"
-                color="secondary"
+                sx={{ mt: 2, color: ORANGE_COLOR }}
                 fullWidth
                 onClick={() => setIsRegistering(!isRegistering)}
-                sx={{ mt: 2 }}
               >
                 {isRegistering ? t('login') : t('signUp')}
               </Button>
             </Box>
           ) : (
             <Box>
+
             </Box>
           )}
         </Box>

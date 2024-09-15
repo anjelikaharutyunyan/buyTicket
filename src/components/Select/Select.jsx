@@ -15,7 +15,7 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     useEffect(() => {
         const ticketsCollection = collection(db, 'ticket');
         let firestoreQuery = ticketsCollection;
-        
+
         switch (sortOrder) {
             case 'latest':
                 firestoreQuery = query(ticketsCollection, orderBy('date', 'desc'));
@@ -27,7 +27,7 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
                 firestoreQuery = query(ticketsCollection, orderBy('price', 'desc'));
                 break;
             default:
-                firestoreQuery = query(ticketsCollection); 
+                firestoreQuery = query(ticketsCollection);
                 break;
         }
         const unsubscribe = onSnapshot(firestoreQuery, (snapshot) => {
@@ -45,15 +45,34 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     };
 
     return (
-        <Box sx={{ width: 200 }}>
-            <FormControl fullWidth>
-                <InputLabel id="sort-by-label">{t('sortBy')}</InputLabel>
+        <Box sx={{ width: 200 }} >
+            <FormControl fullWidth >
+                <InputLabel sx={{ color: "#FF5722" }} id="sort-by-label">{t('sortBy')}</InputLabel>
                 <Select
                     labelId="sort-by-label"
                     id="sort-by-select"
                     value={sortOrder}
                     label="Sort by"
                     onChange={handleChange}
+                    sx={{
+                        '& .MuiSelect-select': {
+                            color: '#FF5722', // Text color for the selected value
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: '#FF5722', // Label color
+                        },
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: '#FF5722', // Border color of the select box
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#FF5722', // Border color on hover
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#FF5722', // Border color when focused
+                            },
+                        },
+                    }}
                 >
                     <MenuItem value="latest">{t('latest')}</MenuItem>
                     <MenuItem value="low">{t('lowToHigh')}</MenuItem>

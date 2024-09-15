@@ -4,16 +4,22 @@ import { styled } from '@mui/material/styles';
 import { Facebook, Instagram, Telegram } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
+const FOOTER_BACKGROUND_COLOR = '#333333';
+const TEXT_COLOR = '#FFFFFF';
+const LINK_COLOR = '#FF5722';
+const FACEBOOK_COLOR = '#1877F2';
+const INSTAGRAM_COLOR = '#C13584';
+const TELEGRAM_COLOR = '#0088cc';
 
 const FooterContainer = styled(Box)(({ theme }) => ({
-    backgroundColor: '#f5f5f5',
+    backgroundColor: FOOTER_BACKGROUND_COLOR,
     padding: theme.spacing(4),
     borderTop: `1px solid ${theme.palette.divider}`,
     marginTop: theme.spacing(10),
 }));
 
 const FooterLink = styled(Link)(({ theme }) => ({
-    color: theme.palette.text.primary,
+    color: LINK_COLOR,
     textDecoration: 'none',
     '&:hover': {
         textDecoration: 'underline',
@@ -27,6 +33,24 @@ const SocialMediaIcons = styled(Box)(({ theme }) => ({
     marginTop: theme.spacing(2),
 }));
 
+const SocialMediaIcon = styled('div')(({ color }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+    borderRadius: '50%',
+    backgroundColor: color,
+    transition: 'transform 0.3s ease',
+    '&:hover': {
+        transform: 'scale(1.2)',
+    },
+    '& svg': {
+        fontSize: 30,
+        color: '#fff',
+    },
+}));
+
 const Footer = () => {
     const { t } = useTranslation();
 
@@ -35,15 +59,15 @@ const Footer = () => {
             <Container>
                 <Grid container spacing={4}>
                     <Grid item xs={12} sm={4}>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h6" gutterBottom sx={{ color: TEXT_COLOR }}>
                             {t('aboutUs')}
                         </Typography>
-                        <Typography variant="body2" paragraph>
-                            {t('aboutText')}
+                        <Typography variant="body2" paragraph sx={{ color: TEXT_COLOR }}>
+                            {t('welcomeText')}
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h6" gutterBottom sx={{ color: TEXT_COLOR }}>
                             {t('quickLinks')}
                         </Typography>
                         <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -62,34 +86,40 @@ const Footer = () => {
                         </ul>
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                        <Typography variant="h6" gutterBottom>
-                        {t('contactUs')}:
+                        <Typography variant="h6" gutterBottom sx={{ color: TEXT_COLOR }}>
+                            {t('contactUs')}
                         </Typography>
-                        <Typography variant="body2" paragraph>
-                        {t('email')}: <FooterLink href="mailto:info@Ticket.am">info@Ticket.am</FooterLink>
+                        <Typography variant="body2" paragraph sx={{ color: TEXT_COLOR }}>
+                            {t('email')}: <FooterLink href="mailto:info@Ticket.am">info@Ticket.am</FooterLink>
                         </Typography>
-                        <Typography variant="body2" paragraph>
-                        {t('phone')}: +374 10 000000
+                        <Typography variant="body2" paragraph sx={{ color: TEXT_COLOR }}>
+                            {t('phone')}: +374 10 000000
                         </Typography>
-                        <Typography variant="body2" paragraph>
-                        {t('address')}: 123 Ulneci Street, Yerevan, Armenia
+                        <Typography variant="body2" paragraph sx={{ color: TEXT_COLOR }}>
+                            {t('address')}: 123 Ulneci Street, Yerevan, Armenia
                         </Typography>
                         <SocialMediaIcons>
                             <FooterLink href="https://www.facebook.com" target="_blank" aria-label="Facebook">
-                                <Facebook />
+                                <SocialMediaIcon color={FACEBOOK_COLOR}>
+                                    <Facebook />
+                                </SocialMediaIcon>
                             </FooterLink>
                             <FooterLink href="https://www.instagram.com" target="_blank" aria-label="Instagram">
-                                <Instagram />
+                                <SocialMediaIcon color={INSTAGRAM_COLOR}>
+                                    <Instagram />
+                                </SocialMediaIcon>
                             </FooterLink>
                             <FooterLink href="https://telegram.org" target="_blank" aria-label="Telegram">
-                                <Telegram />
+                                <SocialMediaIcon color={TELEGRAM_COLOR}>
+                                    <Telegram />
+                                </SocialMediaIcon>
                             </FooterLink>
                         </SocialMediaIcons>
                     </Grid>
                 </Grid>
                 <Box textAlign="center" mt={4}>
-                    <Typography variant="body2" color="textSecondary">
-                        © {new Date().getFullYear()} BuyTicket.am  {t('allRights')}
+                    <Typography variant="body2" sx={{ color: TEXT_COLOR }}>
+                        © {new Date().getFullYear()} BuyTicket.am. {t('allRights')}
                     </Typography>
                 </Box>
             </Container>
