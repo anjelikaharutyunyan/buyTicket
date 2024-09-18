@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
 import { login, logout } from '../../store/authSlice';
 import { auth, db } from '../../firebase/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +23,20 @@ const Login = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const userData = userDoc.data();
+        dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
+      } else {
+        dispatch(logout());
+      }
+    });
+
+    return () => unsubscribe();
+  }, [dispatch]);
 
   const handleRegister = async () => {
     try {
@@ -135,3 +149,5 @@ const Login = () => {
 };
 
 export default Login;
+
+
