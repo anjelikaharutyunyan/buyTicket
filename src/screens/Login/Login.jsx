@@ -3,10 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
 import { login, logout } from '../../store/authSlice';
 import { auth, db } from '../../firebase/firebase';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import SimpleSnackbar from '../../components/Snackbar/Snackbar';
 
 
 const ORANGE_COLOR = '#f9be32';
@@ -16,7 +17,9 @@ const Login = () => {
   const [isRegistering, setIsRegistering] = useState(true);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [open, setOpen] = React.useState(false);
   const [password, setPassword] = useState('');
+  const [snackMessage, setSnackMessage] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -24,19 +27,32 @@ const Login = () => {
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        const userData = userDoc.data();
-        dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
-      } else {
-        dispatch(logout());
-      }
-    });
+  const handleClick = () => {
+    setSnackMessage('hello')
+    setOpen(true);
+  };
 
-    return () => unsubscribe();
-  }, [dispatch]);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  //     if (user) {
+  //       const userDoc = await getDoc(doc(db, 'users', user.uid));
+  //       const userData = userDoc.data();
+  //       dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
+  //     } else {
+  //       dispatch(logout());
+  //     }
+  //   });
+
+  //   return () => unsubscribe();
+  // }, [dispatch]);
 
   const handleRegister = async () => {
     try {
@@ -88,9 +104,9 @@ const Login = () => {
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
             <Box sx={{ width: '100%' }}>
-              <Typography variant="h4" sx={{ color: ORANGE_COLOR }}>{isRegistering ? t('signUp') : t('login')}</Typography>
+              <Typography variant="h4" sx={{ color: ORANGE_COLOR }}>{isRegistering ? t('login') : t('signUp')}</Typography>
               {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
-              {isRegistering && (
+              {!isRegistering && (
                 <TextField
                   label={t('name')}
                   variant="outlined"
@@ -124,9 +140,9 @@ const Login = () => {
                 variant="contained"
                 sx={{ mt: 2, backgroundColor: ORANGE_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
                 fullWidth
-                onClick={isRegistering ? handleRegister : handleLogin}
+                onClick={isRegistering ? handleLogin : handleRegister}
               >
-                {isRegistering ? t('signUp') : t('login')}
+                {isRegistering ? t('login') : t('signUp')}
               </Button>
               <Button
                 variant="text"
@@ -134,8 +150,15 @@ const Login = () => {
                 fullWidth
                 onClick={() => setIsRegistering(!isRegistering)}
               >
-                {isRegistering ? t('login') : t('signUp')}
+                {isRegistering ? t('singUp') : t('login')}
               </Button>
+              <Button onClick={handleClick}>bla bla</Button>
+              <SimpleSnackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                message={snackMessage}
+              />
             </Box>
           ) : (
             <Box>
