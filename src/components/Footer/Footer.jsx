@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 const FOOTER_BACKGROUND_COLOR = '#333333';
 const TEXT_COLOR = '#FFFFFF';
-const LINK_COLOR = '#FF5722';
+const LINK_COLOR = '#F9BE32';
 const FACEBOOK_COLOR = '#1877F2';
 const INSTAGRAM_COLOR = '#C13584';
 const TELEGRAM_COLOR = '#0088cc';

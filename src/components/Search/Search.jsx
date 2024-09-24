@@ -44,6 +44,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
             '&:focus': {
                 width: '20ch',
             },
+            '&::placeholder': {
+                color: 'gray',
+                opacity: 1, 
+            },
         },
     },
 }));

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
 import { login, logout } from '../../store/authSlice';
@@ -7,9 +7,6 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Snackbar from '@mui/material/Snackbar';
-import SimpleSnackbar from '../../components/Snackbar/Snackbar';
-
 
 const ORANGE_COLOR = '#f9be32';
 
@@ -22,25 +19,8 @@ const Login = () => {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
-
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //     if (user) {
-  //       const userDoc = await getDoc(doc(db, 'users', user.uid));
-  //       const userData = userDoc.data();
-  //       dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
-  //     } else {
-  //       dispatch(logout());
-  //     }
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [dispatch]);
 
   const handleRegister = async () => {
     try {
@@ -86,14 +66,12 @@ const Login = () => {
     }
   };
 
-
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 14, mb: 5 }}>
-        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Container maxWidth="sm" sx={{ mt: 14, mb: 5 }}> 
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
-            <Box sx={{ width: '100%' }}>
-              <Typography variant="h4" sx={{ color: ORANGE_COLOR }}>{isRegistering ? t('login') : t('signUp')}</Typography>
+            <Box sx={{ width: '80%' }}>
+              <Typography variant="h4">{isRegistering ? t('login') : t('signUp')}</Typography>
               {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
               {!isRegistering && (
                 <TextField
@@ -133,27 +111,28 @@ const Login = () => {
               >
                 {isRegistering ? t('login') : t('signUp')}
               </Button>
-              <Button
-                variant="text"
-                sx={{ mt: 2, color: ORANGE_COLOR }}
-                fullWidth
+              <Typography
                 onClick={() => setIsRegistering(!isRegistering)}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  cursor: 'pointer',
+                  marginTop: '20px',
+                  textDecoration: 'none',
+                }}
+                onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+                onMouseOut={(e) => e.target.style.textDecoration = 'none'}
               >
-                {isRegistering ? t('singUp') : t('login')}
-              </Button>
-              <SimpleSnackbar />
+                {isRegistering ? t('signUpText') : t('loginText')}
+              </Typography>
             </Box>
           ) : (
-            <Box>
-
-            </Box>
+            <Box> </Box>
           )}
         </Box>
-      </Box>
+     
     </Container>
   );
 };
 
 export default Login;
-
-
