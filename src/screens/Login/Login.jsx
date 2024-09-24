@@ -24,19 +24,19 @@ const Login = () => {
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        const userData = userDoc.data();
-        dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
-      } else {
-        dispatch(logout());
-      }
-    });
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  //     if (user) {
+  //       const userDoc = await getDoc(doc(db, 'users', user.uid));
+  //       const userData = userDoc.data();
+  //       dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
+  //     } else {
+  //       dispatch(logout());
+  //     }
+  //   });
 
-    return () => unsubscribe();
-  }, [dispatch]);
+  //   return () => unsubscribe();
+  // }, [dispatch]);
 
   const handleRegister = async () => {
     try {
@@ -88,9 +88,9 @@ const Login = () => {
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
             <Box sx={{ width: '100%' }}>
-              <Typography variant="h4" sx={{ color: ORANGE_COLOR }}>{isRegistering ? t('signUp') : t('login')}</Typography>
+              <Typography variant="h4" sx={{ color: ORANGE_COLOR }}>{isRegistering ? t('login') : t('signUp')}</Typography>
               {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
-              {isRegistering && (
+              {!isRegistering && (
                 <TextField
                   label={t('name')}
                   variant="outlined"
@@ -124,9 +124,9 @@ const Login = () => {
                 variant="contained"
                 sx={{ mt: 2, backgroundColor: ORANGE_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
                 fullWidth
-                onClick={isRegistering ? handleRegister : handleLogin}
+                onClick={isRegistering ?  handleLogin:handleRegister }
               >
-                {isRegistering ? t('signUp') : t('login')}
+                {isRegistering ? t('login') : t('signUp')}
               </Button>
               <Button
                 variant="text"
@@ -134,7 +134,7 @@ const Login = () => {
                 fullWidth
                 onClick={() => setIsRegistering(!isRegistering)}
               >
-                {isRegistering ? t('login') : t('signUp')}
+                {isRegistering ? t('singUp') : t('login')}
               </Button>
             </Box>
           ) : (

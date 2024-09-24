@@ -68,8 +68,7 @@ const Menu = (props) => {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
-  // Define colors based on some conditions
-  const selectColor = '#F9BE32'; // Example color; adjust as needed
+  const selectColor = '#F9BE32';
 
   return (
     <ThemeProvider theme={theme}>
@@ -97,14 +96,14 @@ const Menu = (props) => {
                   </Link>
                 </Button>
               ))}
-              {isLoggedIn && auth.currentUser.uid !== 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
+              {isLoggedIn && auth.currentUser.uid !== 'y50UFsci2jPanXQqZwiqYvPsgrW2' && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('favoriteTicket')}
                   </Link>
                 </Button>
               )}
-              {isLoggedIn && auth.currentUser.uid === 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
+              {isLoggedIn && auth.currentUser.uid === 'y50UFsci2jPanXQqZwiqYvPsgrW2' && (
                 <>
                   <Button sx={{ color: '#fff', px: 2 }}>
                     <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
