@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Snackbar from '@mui/material/Snackbar';
 import SimpleSnackbar from '../../components/Snackbar/Snackbar';
 
 
@@ -17,28 +18,15 @@ const Login = () => {
   const [isRegistering, setIsRegistering] = useState(true);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [open, setOpen] = React.useState(false);
   const [password, setPassword] = useState('');
-  const [snackMessage, setSnackMessage] = useState('');
   const [error, setError] = useState('');
+
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  const handleClick = () => {
-    setSnackMessage('hello')
-    setOpen(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   // useEffect(() => {
   //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -98,6 +86,7 @@ const Login = () => {
     }
   };
 
+
   return (
     <Container maxWidth="sm">
       <Box sx={{ mt: 14, mb: 5 }}>
@@ -152,13 +141,7 @@ const Login = () => {
               >
                 {isRegistering ? t('singUp') : t('login')}
               </Button>
-              <Button onClick={handleClick}>bla bla</Button>
-              <SimpleSnackbar
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleClose}
-                message={snackMessage}
-              />
+              <SimpleSnackbar />
             </Box>
           ) : (
             <Box>

@@ -4,8 +4,10 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-export default function SimpleSnackbar({snackMessage}) {
-    const [open, setOpen] = React.useState(false);
+export default function SimpleSnackbar() {
+    const [open, setOpen] = React.useState(false)
+    const [snackMessage, setSnackMessage] = React.useState('')
+
     const handleClick = () => {
         setOpen(true);
     };
@@ -36,12 +38,12 @@ export default function SimpleSnackbar({snackMessage}) {
 
     return (
         <div>
-            <Button onClick={handleClick}>{snackMessage}</Button>
+            <Button onClick={handleClick}>Open Snackbar</Button>
             <Snackbar
                 open={open}
                 autoHideDuration={6000}
                 onClose={handleClose}
-                message="Note archived"
+                message={snackMessage}
                 action={action}
             />
         </div>
