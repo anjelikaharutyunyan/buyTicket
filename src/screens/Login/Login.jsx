@@ -7,8 +7,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-const ORANGE_COLOR = '#f9be32';
+import { MAIN_COLOR } from '../../constants';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -105,7 +104,7 @@ const Login = () => {
               />
               <Button
                 variant="contained"
-                sx={{ mt: 2, backgroundColor: ORANGE_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
+                sx={{ mt: 2, backgroundColor: MAIN_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
                 fullWidth
                 onClick={isRegistering ? handleLogin : handleRegister}
               >

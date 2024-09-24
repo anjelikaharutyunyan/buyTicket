@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { theme } from '../../constants';
+import { MAIN_COLOR, theme } from '../../constants';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
@@ -68,8 +68,6 @@ const Menu = (props) => {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
-  // Define colors based on some conditions
-  const selectColor = '#F9BE32'; // Example color; adjust as needed
 
   return (
     <ThemeProvider theme={theme}>
@@ -97,14 +95,14 @@ const Menu = (props) => {
                   </Link>
                 </Button>
               ))}
-              {isLoggedIn && auth.currentUser.uid !== 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
+              {isLoggedIn && auth.currentUser.uid !== 'y50UFsci2jPanXQqZwiqYvPsgrW2' && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('favoriteTicket')}
                   </Link>
                 </Button>
               )}
-              {isLoggedIn && auth.currentUser.uid === 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && (
+              {isLoggedIn && auth.currentUser.uid === 'y50UFsci2jPanXQqZwiqYvPsgrW2' && (
                 <>
                   <Button sx={{ color: '#fff', px: 2 }}>
                     <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -120,7 +118,7 @@ const Menu = (props) => {
               )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {isLoggedIn && auth.currentUser.uid !== 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && <IconButton aria-label="cart">
+              {isLoggedIn && auth.currentUser.uid !== 'y50UFsci2jPanXQqZwiqYvPsgrW2' && <IconButton aria-label="cart">
                 <Badge sx={{ color: 'white' }} badgeContent={cartCount}>
                   <ShoppingCart sx={{ color: 'white' }} onClick={() => handleCartOpen()} />
                 </Badge>
@@ -139,7 +137,7 @@ const Menu = (props) => {
                       <LanguageIcon style={{ color: '#fff' }} />
                     </InputAdornment>
                   }
-                  sx={{ background: selectColor, border: 'none', color: 'white', fontSize: '16px' }}
+                  sx={{ background: MAIN_COLOR, border: 'none', color: 'white', fontSize: '16px' }}
                 />
               }
             >

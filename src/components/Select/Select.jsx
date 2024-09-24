@@ -7,6 +7,7 @@ import Select from '@mui/material/Select';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import { useTranslation } from 'react-i18next';
+import { MAIN_COLOR } from '../../constants';
 
 export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     const [sortOrder, setSortOrder] = useState('');
@@ -70,13 +71,13 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
                     sx={{
                         height: '42px',
                         '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#F9BE32', 
+                            borderColor: MAIN_COLOR, 
                         },
                         '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#F9BE32', 
+                            borderColor: MAIN_COLOR, 
                         },
                         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#F9BE32', 
+                            borderColor: MAIN_COLOR, 
                         },
                         '& .MuiSelect-select': {
                             color: 'black', 

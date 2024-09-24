@@ -6,7 +6,7 @@ import BasicSelect from '../../components/Select/Select';
 import { db } from '../../firebase/firebase';
 import { collection, deleteDoc, doc, getDocs, orderBy, query, limit, setDoc } from 'firebase/firestore';
 import BasicPagination from '../../components/Pagination/Pagination';
-import { TICKETS_PER_PAGE } from '../../constants';
+import { MAIN_COLOR, TICKETS_PER_PAGE } from '../../constants';
 import Loader from '../../components/Loader/Loader';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -27,8 +27,6 @@ const Home = () => {
   const currentUser = useSelector((state) => state.auth.user);
   const [currentPage, setCurrentPage] = useState(1);
   const modalRef = useRef(null);
-
-  const ORANGE_COLOR = '#f9be32';
 
 
   useEffect(() => {
@@ -193,7 +191,7 @@ const Home = () => {
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: '60px' }}>
-          <SearchAppBar style={{ backgroundColor: ORANGE_COLOR }} onSearch={setFilteredTickets} />
+          <SearchAppBar style={{ backgroundColor: MAIN_COLOR }} onSearch={setFilteredTickets} />
           <BasicSelect filteredTickets={filteredTickets} setFilteredTickets={setFilteredTickets} />
         </div>
         <Modal ref={modalRef}>

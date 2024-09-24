@@ -3,13 +3,9 @@ import { Container, Typography, Box, Grid, Link } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Facebook, Instagram, Telegram } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import { FACEBOOK_COLOR, FOOTER_BACKGROUND_COLOR, INSTAGRAM_COLOR, MAIN_COLOR, TELEGRAM_COLOR, TEXT_COLOR } from '../../constants';
 
-const FOOTER_BACKGROUND_COLOR = '#333333';
-const TEXT_COLOR = '#FFFFFF';
-const LINK_COLOR = '#F9BE32';
-const FACEBOOK_COLOR = '#1877F2';
-const INSTAGRAM_COLOR = '#C13584';
-const TELEGRAM_COLOR = '#0088cc';
+
 
 const FooterContainer = styled(Box)(({ theme }) => ({
     backgroundColor: FOOTER_BACKGROUND_COLOR,
@@ -19,7 +15,7 @@ const FooterContainer = styled(Box)(({ theme }) => ({
 }));
 
 const FooterLink = styled(Link)(({ theme }) => ({
-    color: LINK_COLOR,
+    color: MAIN_COLOR,
     textDecoration: 'none',
     '&:hover': {
         textDecoration: 'underline',
