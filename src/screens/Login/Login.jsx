@@ -8,6 +8,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Snackbar from '@mui/material/Snackbar';
+//verification
 //import { sendEmailVerification } from 'firebase/auth';
 
 
@@ -57,6 +58,8 @@ const Login = () => {
       setSnackbarOpen(true);
     }
   };
+  // verification
+
   // const handleRegister = async () => {
   //   try {
   //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -109,7 +112,8 @@ const Login = () => {
       setSnackbarOpen(true);
     }
   };
-  
+  // verification
+
   // const handleLogin = async () => {
   //   try {
   //     const userCredential = await signInWithEmailAndPassword(auth, email, password);
