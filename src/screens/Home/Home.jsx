@@ -14,6 +14,7 @@ import Modal from '../../components/Modal/Modal';
 import Login from '../Login/Login';
 import MyCarousel from '../../components/Carousel/Carousel';
 import { Box } from '@mui/material';
+import { Timestamp } from 'firebase/firestore';
 
 
 const Home = () => {
@@ -40,15 +41,13 @@ const Home = () => {
 
         for (const docSnap of ticketSnapshot.docs) {
           const ticketData = docSnap.data();
-          if (ticketData && ticketData.date) {
-            const ticketDate = new Date(ticketData.date);
-            if (ticketDate < today) {
-              await deleteDoc(doc(db, 'ticket', docSnap.id));
-            } else {
-              ticketList.push({ id: docSnap.id, ...ticketData });
-            }
+          const ticketDate = ticketData.date instanceof Timestamp
+            ? ticketData.date.toDate()
+            : new Date(ticketData.date);
+          if (ticketDate < today) {
+            await deleteDoc(doc(db, 'ticket', docSnap.id));
           } else {
-            console.warn('Invalid ticket data:', ticketData);
+            ticketList.push({ id: docSnap.id, ...ticketData });
           }
         }
         setTickets(ticketList);
@@ -62,6 +61,7 @@ const Home = () => {
 
     fetchTickets();
   }, []);
+
 
   useEffect(() => {
     const fetchSoonest = async () => {

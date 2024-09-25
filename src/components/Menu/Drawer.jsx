@@ -8,18 +8,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import logo from './logo.png';
+import { auth } from '../../firebase/firebase';
+import { ADMIN } from '../../constants';
 
 const drawerWidth = 240;
 
 const NavDrawer = ({ container, mobileOpen, handleDrawerToggle, navItems, isLoggedIn }) => {
-
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
-        <img src={logo} alt='Logo' style={{ width: '200px', marginTop: '5px' }} />
-      </Box>
-      <Divider />
       <List>
         {navItems.map((item) => (
           <Link key={item.to} to={item.to} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -40,29 +36,24 @@ const NavDrawer = ({ container, mobileOpen, handleDrawerToggle, navItems, isLogg
                 </ListItemButton>
               </ListItem>
             </Link>
-            <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <ListItem disablePadding>
-                <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-                  <ListItemText primary="Ticket" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            <Link to="/statistic" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <ListItem disablePadding>
-                <ListItemButton sx={{ textAlign: 'center', paddingX: 2 }}>
-                  <ListItemText primary="Statistic" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
+            {isLoggedIn && auth.currentUser.uid === ADMIN && (
+                <>
+                  <Button sx={{ color: '#fff', px: 2 }}>
+                    <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {t('ticket')}
+                    </Link>
+                  </Button>
+                  <Button sx={{ color: '#fff', px: 2 }}>
+                    <Link to="/statistic" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {t('statistic')}
+                    </Link>
+                  </Button>
+                </>
+              )}
           </>
         )}
       </List>
-      <Divider />
-      <Link to={isLoggedIn ? '/' : '/login'} style={{ textDecoration: 'none' }}>
-        <Button sx={{ width: '100%', mt: 2 }}>
-          {isLoggedIn ? 'Home' : 'Login'}
-        </Button>
-      </Link>
+    
     </Box>
   );
 
@@ -76,13 +67,13 @@ const NavDrawer = ({ container, mobileOpen, handleDrawerToggle, navItems, isLogg
         keepMounted: true,
       }}
       sx={{
-        display: { xs: 'block', sm: 'none' },
+        display: { xs: 'block', sm: 'none' }, 
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
       }}
     >
       {drawer}
     </Drawer>
   );
-}
+};
 
 export default NavDrawer;

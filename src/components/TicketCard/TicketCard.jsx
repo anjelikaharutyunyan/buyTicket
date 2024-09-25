@@ -16,7 +16,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     marginBottom: theme.spacing(2),
     transition: 'transform 0.3s ease',
     '&:hover': {
-        transform: 'scale(1.05)', // Scale card by 5% on hover
+        transform: 'scale(1.05)',
     },
     cursor: 'pointer',
 }));
