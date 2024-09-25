@@ -8,6 +8,8 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Snackbar from '@mui/material/Snackbar';
+//import { sendEmailVerification } from 'firebase/auth';
+
 
 
 const ORANGE_COLOR = '#f9be32';
@@ -22,7 +24,7 @@ const Login = () => {
   
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // success, error, warning, info
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); 
   
   const navigate = useNavigate();
 
@@ -55,6 +57,37 @@ const Login = () => {
       setSnackbarOpen(true);
     }
   };
+  // const handleRegister = async () => {
+  //   try {
+  //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  //     const user = userCredential.user;
+  
+  //     await setDoc(doc(db, 'users', user.uid), {
+  //       name: name,
+  //       email: user.email,
+  //     });
+  
+  //     await sendEmailVerification(user);
+  //     console.log('Verification email sent');
+  
+  //     dispatch(login({ email: user.email, uid: user.uid, name: name }));
+  //     setError('');
+  
+  //     setSnackbarMessage('Registration successful! Please verify your email.');
+  //     setSnackbarSeverity('success');
+  //     setSnackbarOpen(true);
+  
+  //     setTimeout(() => {
+  //       navigate('/');
+  //     }, 2000);
+  //   } catch (error) {
+  //     setError(error.message);
+  //     setSnackbarMessage('Registration failed.');
+  //     setSnackbarSeverity('error');
+  //     setSnackbarOpen(true);
+  //   }
+  // };
+  
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -77,7 +110,27 @@ const Login = () => {
     }
   };
   
-
+  // const handleLogin = async () => {
+  //   try {
+  //     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  //     const user = userCredential.user;
+  
+  //     if (!user.emailVerified) {
+  //       setError('Your email is not verified. Please check your inbox.');
+  //       setInfoMessage('Verification email has been sent again. Please verify your account.');
+  //       await sendEmailVerification(user);  
+  //       return;
+  //     }
+  
+  //     setError('');
+  //     setInfoMessage('Login successful!');
+  //     navigate('/');
+  //   } catch (error) {
+  //     setError('Login failed: Invalid email or password.');
+  //     setInfoMessage('');
+  //   }
+  // };
+  
   const handleLogout = async () => {
     try {
       await signOut(auth);
