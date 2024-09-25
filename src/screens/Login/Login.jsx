@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
 import { login, logout } from '../../store/authSlice';
@@ -8,7 +8,6 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Snackbar from '@mui/material/Snackbar';
-import SimpleSnackbar from '../../components/Snackbar/Snackbar';
 
 
 const ORANGE_COLOR = '#f9be32';
@@ -20,27 +19,16 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
+  
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // success, error, warning, info
+  
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //     if (user) {
-  //       const userDoc = await getDoc(doc(db, 'users', user.uid));
-  //       const userData = userDoc.data();
-  //       dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
-  //     } else {
-  //       dispatch(logout());
-  //     }
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [dispatch]);
 
   const handleRegister = async () => {
     try {
@@ -54,38 +42,65 @@ const Login = () => {
 
       dispatch(login({ email: user.email, uid: user.uid, name: name }));
       setError('');
+      setSnackbarMessage('Registration successful!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+
       navigate('/');
+
     } catch (error) {
       setError(error.message);
+      setSnackbarMessage('Registration failed.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
-
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       const userData = userDoc.data();
-
       dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
       setError('');
-      navigate('/');
+      setSnackbarMessage('Login successful!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+      setTimeout(() => {
+        navigate('/');
+      }, 2000); 
     } catch (error) {
       setError('Invalid email or password');
+      setSnackbarMessage('Login failed. Invalid email or password.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
+  
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
       dispatch(logout());
       navigate('/login');
+      setSnackbarMessage('Logout successful!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+      
     } catch (error) {
       setError(error.message);
+      setSnackbarMessage('Logout failed.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   return (
     <Container maxWidth="sm">
@@ -141,11 +156,23 @@ const Login = () => {
               >
                 {isRegistering ? t('singUp') : t('login')}
               </Button>
-              <SimpleSnackbar />
+              
+              <Snackbar
+  open={snackbarOpen}
+  autoHideDuration={6000}
+  onClose={handleSnackbarClose}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+  sx={{ zIndex: 1300 }}  
+>
+  <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+    {snackbarMessage}
+  </Alert>
+</Snackbar>
+
             </Box>
           ) : (
             <Box>
-
+              {/* Add content for logged-in users */}
             </Box>
           )}
         </Box>
@@ -155,5 +182,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
