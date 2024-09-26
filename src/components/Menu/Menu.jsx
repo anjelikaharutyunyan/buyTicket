@@ -21,6 +21,7 @@ import CartPortal from '../CartPortal/CartPortal';
 import { useState } from 'react';
 import { auth } from '../../firebase/firebase';
 import NavDrawer from './Drawer';
+import UserDropDown from '../DropDown/DropDown';
 
 const Menu = (props) => {
   const { i18n } = useTranslation();
@@ -52,11 +53,6 @@ const Menu = (props) => {
   };
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
-  const handleLogout = () => {
-    dispatch(logout());
-  };
 
   const handleCartOpen = () => {
     setCartOpen(true);
@@ -71,7 +67,7 @@ const Menu = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box  sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+      <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
         <CssBaseline />
         <AppBar component="nav" style={{ paddingInline: '50px' }}>
           <Toolbar>
@@ -143,10 +139,10 @@ const Menu = (props) => {
                     color: 'white',
                     fontSize: '16px',
                     '& fieldset': {
-                      border: 'none',  
+                      border: 'none',
                     },
                     '&.Mui-focused fieldset': {
-                      border: 'none',  
+                      border: 'none',
                     },
                   }}
                 />
@@ -156,13 +152,10 @@ const Menu = (props) => {
               <MenuItem value="ru">{t('russian')}</MenuItem>
               <MenuItem value="hy">{t('armenian')}</MenuItem>
             </Select>
-            <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
+            <Button sx={{ color: '#fff'}}>
               {isLoggedIn ? (
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <Box> {user.name} </Box>
-                  <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {t('logout')}
-                  </Link>
+                <div style={{ display: 'flex'}}>
+                    <UserDropDown />
                 </div>
               ) : (
                 <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>

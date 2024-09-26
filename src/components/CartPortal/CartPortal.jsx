@@ -36,26 +36,10 @@ const CartPortal = ({ open, onClose }) => {
     return () => unsubscribe();
   }, [currentUser]);
 
-  // useEffect(() => {
-  //   dispatch(setCartCount(cartItems.length))
-  // }, [cartItems])
 
   useEffect(() => {
     dispatch(setCartCount(cartItems.length));
   }, [cartItems, dispatch]);
-  
-
-  // const handleRemoveCartItem = async (ticket) => {
-  //   if (!currentUser) return;
-  //   try {
-  //     const cartDocRef = doc(db, 'users', currentUser.uid, 'cart', ticket.id);
-  //     await deleteDoc(cartDocRef);
-  //   } catch (error) {
-  //     console.error('Error removing cart ticket: ', error);
-  //   } finally {
-  //     dispatch(removeFromCart())
-  //   }
-  // };
 
   const handleRemoveCartItem = async (ticket) => {
     if (!currentUser) return;
