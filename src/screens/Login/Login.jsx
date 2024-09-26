@@ -7,13 +7,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-<<<<<<< HEAD
-import Snackbar from '@mui/material/Snackbar';
-
-const ORANGE_COLOR = '#f9be32';
-=======
 import { MAIN_COLOR } from '../../constants';
->>>>>>> fixStyles
 
 const Login = () => {
   const { t } = useTranslation();
