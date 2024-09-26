@@ -7,6 +7,8 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Snackbar from '@mui/material/Snackbar';
+
 import { MAIN_COLOR } from '../../constants';
 
 const Login = () => {
@@ -16,17 +18,17 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
   const navigate = useNavigate();
+
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-<<<<<<< HEAD
-
-=======
->>>>>>> fixStyles
   const handleRegister = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -36,12 +38,15 @@ const Login = () => {
         name: name,
         email: user.email,
       });
+
       dispatch(login({ email: user.email, uid: user.uid, name: name }));
       setError('');
       setSnackbarMessage('Registration successful!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
+
       navigate('/');
+
     } catch (error) {
       setError(error.message);
       setSnackbarMessage('Registration failed.');
@@ -63,14 +68,16 @@ const Login = () => {
       setSnackbarOpen(true);
       setTimeout(() => {
         navigate('/');
-      }, 3000);
+      }, 2000);
     } catch (error) {
       setError('Invalid email or password');
+
       setSnackbarMessage('Login failed. Invalid email or password.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }
   };
+
 
   const handleLogout = async () => {
     try {
@@ -89,7 +96,6 @@ const Login = () => {
     }
   };
 
-<<<<<<< HEAD
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -112,14 +118,9 @@ const Login = () => {
       </Snackbar>
       <Box sx={{ mt: 14, mb: 5 }}>
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-=======
-  return (
-    <Container maxWidth="sm" sx={{ mt: 14, mb: 5 }}> 
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
->>>>>>> fixStyles
           {!isLoggedIn ? (
-            <Box sx={{ width: '80%' }}>
-              <Typography variant="h4">{isRegistering ? t('login') : t('signUp')}</Typography>
+            <Box sx={{ width: '100%' }}>
+              <Typography variant="h4" sx={{ color: MAIN_COLOR }}>{isRegistering ? t('login') : t('signUp')}</Typography>
               {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
               {!isRegistering && (
                 <TextField
@@ -171,27 +172,16 @@ const Login = () => {
                 onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
                 onMouseOut={(e) => e.target.style.textDecoration = 'none'}
               >
-<<<<<<< HEAD
-                {isRegistering ? t('singUp') : t('login')}
-              </Button>
-
-
-
+                {isRegistering ? t('signUpText') : t('loginText')}
+              </Typography>
             </Box>
           ) : (
             <Box>
               {/* Add content for logged-in users */}
             </Box>
-=======
-                {isRegistering ? t('signUpText') : t('loginText')}
-              </Typography>
-            </Box>
-          ) : (
-            <Box> </Box>
->>>>>>> fixStyles
           )}
         </Box>
-     
+      </Box>
     </Container>
   );
 };
