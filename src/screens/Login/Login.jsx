@@ -8,10 +8,6 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Snackbar from '@mui/material/Snackbar';
-//verification
-//import { sendEmailVerification } from 'firebase/auth';
-
-
 
 const ORANGE_COLOR = '#f9be32';
 
@@ -22,13 +18,10 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); 
-  
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const navigate = useNavigate();
-
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
@@ -42,15 +35,12 @@ const Login = () => {
         name: name,
         email: user.email,
       });
-
       dispatch(login({ email: user.email, uid: user.uid, name: name }));
       setError('');
       setSnackbarMessage('Registration successful!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-
       navigate('/');
-
     } catch (error) {
       setError(error.message);
       setSnackbarMessage('Registration failed.');
@@ -58,39 +48,7 @@ const Login = () => {
       setSnackbarOpen(true);
     }
   };
-  // verification
-
-  // const handleRegister = async () => {
-  //   try {
-  //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  //     const user = userCredential.user;
-  
-  //     await setDoc(doc(db, 'users', user.uid), {
-  //       name: name,
-  //       email: user.email,
-  //     });
-  
-  //     await sendEmailVerification(user);
-  //     console.log('Verification email sent');
-  
-  //     dispatch(login({ email: user.email, uid: user.uid, name: name }));
-  //     setError('');
-  
-  //     setSnackbarMessage('Registration successful! Please verify your email.');
-  //     setSnackbarSeverity('success');
-  //     setSnackbarOpen(true);
-  
-  //     setTimeout(() => {
-  //       navigate('/');
-  //     }, 2000);
-  //   } catch (error) {
-  //     setError(error.message);
-  //     setSnackbarMessage('Registration failed.');
-  //     setSnackbarSeverity('error');
-  //     setSnackbarOpen(true);
-  //   }
-  // };
-  
+ 
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -104,7 +62,7 @@ const Login = () => {
       setSnackbarOpen(true);
       setTimeout(() => {
         navigate('/');
-      }, 2000); 
+      }, 3000);
     } catch (error) {
       setError('Invalid email or password');
       setSnackbarMessage('Login failed. Invalid email or password.');
@@ -112,29 +70,7 @@ const Login = () => {
       setSnackbarOpen(true);
     }
   };
-  // verification
 
-  // const handleLogin = async () => {
-  //   try {
-  //     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-  //     const user = userCredential.user;
-  
-  //     if (!user.emailVerified) {
-  //       setError('Your email is not verified. Please check your inbox.');
-  //       setInfoMessage('Verification email has been sent again. Please verify your account.');
-  //       await sendEmailVerification(user);  
-  //       return;
-  //     }
-  
-  //     setError('');
-  //     setInfoMessage('Login successful!');
-  //     navigate('/');
-  //   } catch (error) {
-  //     setError('Login failed: Invalid email or password.');
-  //     setInfoMessage('');
-  //   }
-  // };
-  
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -143,7 +79,7 @@ const Login = () => {
       setSnackbarMessage('Logout successful!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-      
+
     } catch (error) {
       setError(error.message);
       setSnackbarMessage('Logout failed.');
@@ -161,6 +97,17 @@ const Login = () => {
 
   return (
     <Container maxWidth="sm">
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        sx={{ zIndex: 1300 }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       <Box sx={{ mt: 14, mb: 5 }}>
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
@@ -213,18 +160,8 @@ const Login = () => {
               >
                 {isRegistering ? t('singUp') : t('login')}
               </Button>
-              
-              <Snackbar
-  open={snackbarOpen}
-  autoHideDuration={6000}
-  onClose={handleSnackbarClose}
-  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-  sx={{ zIndex: 1300 }}  
->
-  <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-    {snackbarMessage}
-  </Alert>
-</Snackbar>
+
+
 
             </Box>
           ) : (
