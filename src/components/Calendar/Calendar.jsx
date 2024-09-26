@@ -24,7 +24,7 @@ export default function Calendar() {
               color: '#333',
             },
             '& .Mui-selected': {
-              backgroundColor: '#007bff !important',
+              backgroundColor: '#F9BE32 !important',
               color: '#fff !important',
             },
             '& .MuiPickersDay-dayWithMargin': {

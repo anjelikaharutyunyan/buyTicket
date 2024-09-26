@@ -7,9 +7,13 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+<<<<<<< HEAD
 import Snackbar from '@mui/material/Snackbar';
 
 const ORANGE_COLOR = '#f9be32';
+=======
+import { MAIN_COLOR } from '../../constants';
+>>>>>>> fixStyles
 
 const Login = () => {
   const { t } = useTranslation();
@@ -23,10 +27,12 @@ const Login = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fixStyles
   const handleRegister = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -89,6 +95,7 @@ const Login = () => {
     }
   };
 
+<<<<<<< HEAD
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -111,9 +118,14 @@ const Login = () => {
       </Snackbar>
       <Box sx={{ mt: 14, mb: 5 }}>
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+=======
+  return (
+    <Container maxWidth="sm" sx={{ mt: 14, mb: 5 }}> 
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+>>>>>>> fixStyles
           {!isLoggedIn ? (
-            <Box sx={{ width: '100%' }}>
-              <Typography variant="h4" sx={{ color: ORANGE_COLOR }}>{isRegistering ? t('login') : t('signUp')}</Typography>
+            <Box sx={{ width: '80%' }}>
+              <Typography variant="h4">{isRegistering ? t('login') : t('signUp')}</Typography>
               {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
               {!isRegistering && (
                 <TextField
@@ -147,18 +159,25 @@ const Login = () => {
               />
               <Button
                 variant="contained"
-                sx={{ mt: 2, backgroundColor: ORANGE_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
+                sx={{ mt: 2, backgroundColor: MAIN_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
                 fullWidth
                 onClick={isRegistering ? handleLogin : handleRegister}
               >
                 {isRegistering ? t('login') : t('signUp')}
               </Button>
-              <Button
-                variant="text"
-                sx={{ mt: 2, color: ORANGE_COLOR }}
-                fullWidth
+              <Typography
                 onClick={() => setIsRegistering(!isRegistering)}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  cursor: 'pointer',
+                  marginTop: '20px',
+                  textDecoration: 'none',
+                }}
+                onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+                onMouseOut={(e) => e.target.style.textDecoration = 'none'}
               >
+<<<<<<< HEAD
                 {isRegistering ? t('singUp') : t('login')}
               </Button>
 
@@ -169,9 +188,16 @@ const Login = () => {
             <Box>
               {/* Add content for logged-in users */}
             </Box>
+=======
+                {isRegistering ? t('signUpText') : t('loginText')}
+              </Typography>
+            </Box>
+          ) : (
+            <Box> </Box>
+>>>>>>> fixStyles
           )}
         </Box>
-      </Box>
+     
     </Container>
   );
 };

@@ -20,6 +20,14 @@ const BasicPagination = ({ totalItems, itemsPerPage, onPageChange }) => {
                     page={currentPage}
                     onChange={handlePageChange}
                     color="primary"
+                    sx={{
+                        '& .MuiPaginationItem-root.Mui-selected': {
+                            backgroundColor: 'orange',
+                          },
+                          '& .MuiPaginationItem-root.Mui-selected:hover': {
+                            backgroundColor: '#f9a109',
+                          },
+                    }}
                 />
             </Stack>
         </div>

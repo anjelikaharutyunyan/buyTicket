@@ -73,8 +73,9 @@ const resources = {
             latest: 'Վերջին',
             lowToHigh: 'Գին: ցածրից բարձր',
             highToLow: 'Գին: բարձրից ցածր',
-            events: 'Իրադարձություններ',
+            events: 'Միջոցառումներ',
             quickLinks: 'Արագ հղումներ',
+            loginText: 'Արդեն ունե՞ք հաշիվ: Մուտք գործեք',
             privacyPolicy: 'Գաղտնիության քաղաքականություն',
             contactUs: 'Կապվեք մեզ հետ',
             email: 'Էլ. փոստ',
@@ -121,7 +122,7 @@ const resources = {
         translation: {
             soon: 'Скоро',
             home: 'Главная страница',
-
+            loginText: 'У вас уже есть аккаунт? Войти',
             login: 'Вход',
             english: 'Английский',
             russian: 'Русский',
