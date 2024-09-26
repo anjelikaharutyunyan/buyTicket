@@ -26,6 +26,7 @@ const Login = () => {
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
+
   const handleRegister = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -48,7 +49,7 @@ const Login = () => {
       setSnackbarOpen(true);
     }
   };
- 
+
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
