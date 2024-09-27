@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { ADMIN, MAIN_COLOR, theme } from '../../constants';
+import { MAIN_COLOR, theme } from '../../constants';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
@@ -10,8 +10,7 @@ import { Badge, InputAdornment, MenuItem, OutlinedInput, Select, ThemeProvider }
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import CssBaseline from '@mui/material/CssBaseline';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../store/authSlice';
+import { useSelector } from 'react-redux';
 import logo from './logo.png';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +20,7 @@ import CartPortal from '../CartPortal/CartPortal';
 import { useState } from 'react';
 import { auth } from '../../firebase/firebase';
 import NavDrawer from './Drawer';
+import UserDropDown from '../DropDown/DropDown';
 
 const Menu = (props) => {
   const { i18n } = useTranslation();
@@ -52,11 +52,6 @@ const Menu = (props) => {
   };
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
-  const handleLogout = () => {
-    dispatch(logout());
-  };
 
   const handleCartOpen = () => {
     setCartOpen(true);
@@ -71,7 +66,7 @@ const Menu = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box  sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+      <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
         <CssBaseline />
         <AppBar component="nav" style={{ paddingInline: '50px' }}>
           <Toolbar>
@@ -118,7 +113,7 @@ const Menu = (props) => {
               )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {isLoggedIn && auth.currentUser.uid !== ADMIN && <IconButton aria-label="cart">
+              {isLoggedIn && auth.currentUser.uid !== 'Q89mlqEtR1O3VHCAVUZSxcYbtuI3' && <IconButton aria-label="cart">
                 <Badge sx={{ color: 'white' }} badgeContent={cartCount}>
                   <ShoppingCart sx={{ color: 'white' }} onClick={() => handleCartOpen()} />
                 </Badge>
@@ -143,10 +138,10 @@ const Menu = (props) => {
                     color: 'white',
                     fontSize: '16px',
                     '& fieldset': {
-                      border: 'none',  
+                      border: 'none',
                     },
                     '&.Mui-focused fieldset': {
-                      border: 'none',  
+                      border: 'none',
                     },
                   }}
                 />
@@ -156,13 +151,10 @@ const Menu = (props) => {
               <MenuItem value="ru">{t('russian')}</MenuItem>
               <MenuItem value="hy">{t('armenian')}</MenuItem>
             </Select>
-            <Button onClick={handleLogout} sx={{ color: '#fff', ml: 2 }}>
+            <Button sx={{ color: '#fff'}}>
               {isLoggedIn ? (
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <Box> {user.name} </Box>
-                  <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {t('logout')}
-                  </Link>
+                <div style={{ display: 'flex'}}>
+                    <UserDropDown />
                 </div>
               ) : (
                 <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>

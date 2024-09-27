@@ -47,7 +47,7 @@ const FavoriteTicket = () => {
   };
 
   return (
-    <div style={{ padding: "20px", position: "relative", top: "64px" }}>
+    <div style={{ padding: "20px", position: "relative", top: "64px", minHeight: '100vh'}}>
       <h1 style={{ textAlign: "center" }}>Favorite Tickets</h1>
       <div>
         {loading ? <Loader /> : <div
