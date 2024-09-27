@@ -108,7 +108,7 @@ const TicketCard = ({ ticket, isLiked, onLike, onCart, handleOpenModal }) => {
         <StyledCard>
             <CardMedia
                 component="img"
-                height="140"
+                height="130"
                 image={ticket.image || no_available_image}
                 alt={ticket.title}
             />

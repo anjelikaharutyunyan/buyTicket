@@ -44,7 +44,6 @@ const Login = () => {
       setSnackbarMessage('Registration successful!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-
       navigate('/');
 
     } catch (error) {
@@ -68,7 +67,7 @@ const Login = () => {
       setSnackbarOpen(true);
       setTimeout(() => {
         navigate('/');
-      }, 2000);
+      }, 1000);
     } catch (error) {
       setError('Invalid email or password');
 
@@ -104,20 +103,20 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{minHeight: '60vh'}}>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         sx={{ zIndex: 1300 }}
       >
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <Box sx={{ mt: 14, mb: 5 }}>
-        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box sx={{ mt: 14}}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
             <Box sx={{ width: '100%' }}>
               <Typography variant="h4" sx={{ color: MAIN_COLOR }}>{isRegistering ? t('login') : t('signUp')}</Typography>

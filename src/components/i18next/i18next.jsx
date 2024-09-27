@@ -57,7 +57,8 @@ const resources = {
             founderName: "Joe Doe",
             founderCEO: "Founder & CEO",
             chiefName: "Jane Smith",
-            chief: "Chief Operating Officer"
+            chief: "Chief Operating Officer",
+         
         },
     },
     hy: {
@@ -115,7 +116,8 @@ const resources = {
             founderName: "Ջո Դո",
             founderCEO: "Հիմնադիր և գլխավոր տնօրեն",
             chiefName: "Ջեյն Սմիթ",
-            chief: "Գլխավոր գործադիր տնօրեն"
+            chief: "Գլխավոր գործադիր տնօրեն",
+            signUpText: 'Չունե՞ք հաշիվ: Գրանցվեք',
         },
     },
     ru: {
@@ -148,7 +150,7 @@ const resources = {
             email: 'Электронная почта',
             name: 'Имя',
             ourTeam: 'Наша команда',
-
+            signUpText: 'У вас нет учетной записи? Зарегистрироваться',
             createTicket: 'Создать билет',
             eventTitle: 'Название события',
             eventDescription: 'Описание события',

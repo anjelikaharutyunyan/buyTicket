@@ -11,14 +11,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/authSlice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserDropDown() {
     const user = useSelector((state) => state.auth.user);
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         dispatch(logout());
+        navigate('/login');
     };
 
     return (
@@ -45,13 +48,13 @@ export default function UserDropDown() {
 
 const Listbox = styled('ul')`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 10px;
+  left: 0;
   font-family: 'Roboto', sans-serif;
   font-size: 0.875rem;
   padding: 8px 0;
   margin: 0;
-  width: 150px;
+  width: 140px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   background-color: white;
   transition: opacity 200ms ease-in, transform 200ms ease-in;
