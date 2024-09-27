@@ -4,6 +4,7 @@ import { db } from '../../firebase/firebase';
 import TicketCard from '../../components/TicketCard/TicketCard';
 import { Box, TextField, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { MAIN_COLOR } from '../../constants';
 
 const Ticket = () => {
     const { t } = useTranslation();
@@ -76,7 +77,7 @@ const Ticket = () => {
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
                 />
-                <Button variant="contained" color="primary" onClick={handlePushData}>
+                <Button variant="contained" onClick={handlePushData} style={{backgroundColor: MAIN_COLOR }}>
                     {t('submit')}
                 </Button>
             </Box>

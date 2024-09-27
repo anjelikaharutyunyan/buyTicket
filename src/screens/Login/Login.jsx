@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import Snackbar from '@mui/material/Snackbar';
 import { sendEmailVerification } from 'firebase/auth';
 
-const ORANGE_COLOR = '#f9be32';
+import { MAIN_COLOR } from '../../constants';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -19,10 +19,13 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
   const navigate = useNavigate();
+
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
@@ -44,7 +47,9 @@ const Login = () => {
       setSnackbarMessage('Registration successful! Please verify your email.');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
+
       navigate('/');
+
     } catch (error) {
       setError(error.message);
       setSnackbarMessage('Registration failed.');
@@ -73,9 +78,10 @@ const Login = () => {
       setSnackbarOpen(true);
       setTimeout(() => {
         navigate('/');
-      }, 3000);
+      }, 2000);
     } catch (error) {
       setError('Invalid email or password');
+
       setSnackbarMessage('Login failed. Invalid email or password.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
@@ -125,7 +131,7 @@ const Login = () => {
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
             <Box sx={{ width: '100%' }}>
-              <Typography variant="h4" sx={{ color: ORANGE_COLOR }}>{isRegistering ? t('login') : t('signUp')}</Typography>
+              <Typography variant="h4" sx={{ color: MAIN_COLOR }}>{isRegistering ? t('login') : t('signUp')}</Typography>
               {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
               {!isRegistering && (
                 <TextField
@@ -159,21 +165,27 @@ const Login = () => {
               />
               <Button
                 variant="contained"
-                sx={{ mt: 2, backgroundColor: ORANGE_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
+                sx={{ mt: 2, backgroundColor: MAIN_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
                 fullWidth
                 
                 onClick={isLoggedIn ? handleLogout: isRegistering ? handleLogin : handleRegister}
               >
                 {isRegistering ? t('login') : t('signUp')}
               </Button>
-              <Button
-                variant="text"
-                sx={{ mt: 2, color: ORANGE_COLOR }}
-                fullWidth
+              <Typography
                 onClick={() => setIsRegistering(!isRegistering)}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  cursor: 'pointer',
+                  marginTop: '20px',
+                  textDecoration: 'none',
+                }}
+                onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+                onMouseOut={(e) => e.target.style.textDecoration = 'none'}
               >
-                {isRegistering ? t('singUp') : t('login')}
-              </Button>
+                {isRegistering ? t('signUpText') : t('loginText')}
+              </Typography>
             </Box>
           ) : (
             <Box>

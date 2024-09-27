@@ -7,6 +7,7 @@ import Select from '@mui/material/Select';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import { useTranslation } from 'react-i18next';
+import { MAIN_COLOR } from '../../constants';
 
 export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     const [sortOrder, setSortOrder] = useState('');
@@ -30,6 +31,7 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
                 firestoreQuery = query(ticketsCollection);
                 break;
         }
+
         const unsubscribe = onSnapshot(firestoreQuery, (snapshot) => {
             const tickets = snapshot.docs.map(doc => ({
                 id: doc.id,
@@ -37,6 +39,7 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
             }));
             setFilteredTickets(tickets);
         });
+
         return () => unsubscribe();
     }, [sortOrder, setFilteredTickets]);
 
@@ -45,9 +48,20 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
     };
 
     return (
-        <Box sx={{ width: 200 }} >
-            <FormControl fullWidth >
-                <InputLabel sx={{ color: "#FF5722" }} id="sort-by-label">{t('sortBy')}</InputLabel>
+        <Box sx={{ width: 200 }}>
+            <FormControl fullWidth>
+                <InputLabel 
+                    id="sort-by-label" 
+                    sx={{
+                        color: 'gray',
+                        top: -5,
+                        '&.Mui-focused': {
+                            color: 'gray', 
+                        },
+                    }}
+                >
+                    {t('sortBy')}
+                </InputLabel>
                 <Select
                     labelId="sort-by-label"
                     id="sort-by-select"
@@ -55,22 +69,21 @@ export default function BasicSelect({ filteredTickets, setFilteredTickets }) {
                     label="Sort by"
                     onChange={handleChange}
                     sx={{
+                        height: '42px',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: MAIN_COLOR, 
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: MAIN_COLOR, 
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: MAIN_COLOR, 
+                        },
                         '& .MuiSelect-select': {
-                            color: '#FF5722', // Text color for the selected value
+                            color: 'black', 
                         },
                         '& .MuiInputLabel-root': {
-                            color: '#FF5722', // Label color
-                        },
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: '#FF5722', // Border color of the select box
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#FF5722', // Border color on hover
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#FF5722', // Border color when focused
-                            },
+                            color: 'black', 
                         },
                     }}
                 >

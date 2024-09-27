@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { theme } from '../../constants';
+import { ADMIN, MAIN_COLOR, theme } from '../../constants';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
@@ -68,11 +68,10 @@ const Menu = (props) => {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
-  const selectColor = '#F9BE32';
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box  sx={{ flexGrow: 1, display: { md: 'flex' } }}>
         <CssBaseline />
         <AppBar component="nav" style={{ paddingInline: '50px' }}>
           <Toolbar>
@@ -119,7 +118,7 @@ const Menu = (props) => {
               )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {isLoggedIn && auth.currentUser.uid !== 'i0b3souhaJOaWFg1JrjyPZ0FF6A3' && <IconButton aria-label="cart">
+              {isLoggedIn && auth.currentUser.uid !== ADMIN && <IconButton aria-label="cart">
                 <Badge sx={{ color: 'white' }} badgeContent={cartCount}>
                   <ShoppingCart sx={{ color: 'white' }} onClick={() => handleCartOpen()} />
                 </Badge>
@@ -138,7 +137,18 @@ const Menu = (props) => {
                       <LanguageIcon style={{ color: '#fff' }} />
                     </InputAdornment>
                   }
-                  sx={{ background: selectColor, border: 'none', color: 'white', fontSize: '16px' }}
+                  sx={{
+                    background: MAIN_COLOR,
+                    border: 'none',
+                    color: 'white',
+                    fontSize: '16px',
+                    '& fieldset': {
+                      border: 'none',  
+                    },
+                    '&.Mui-focused fieldset': {
+                      border: 'none',  
+                    },
+                  }}
                 />
               }
             >

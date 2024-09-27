@@ -36,9 +36,26 @@ const CartPortal = ({ open, onClose }) => {
     return () => unsubscribe();
   }, [currentUser]);
 
+  // useEffect(() => {
+  //   dispatch(setCartCount(cartItems.length))
+  // }, [cartItems])
+
   useEffect(() => {
-    dispatch(setCartCount(cartItems.length))
-  }, [cartItems])
+    dispatch(setCartCount(cartItems.length));
+  }, [cartItems, dispatch]);
+  
+
+  // const handleRemoveCartItem = async (ticket) => {
+  //   if (!currentUser) return;
+  //   try {
+  //     const cartDocRef = doc(db, 'users', currentUser.uid, 'cart', ticket.id);
+  //     await deleteDoc(cartDocRef);
+  //   } catch (error) {
+  //     console.error('Error removing cart ticket: ', error);
+  //   } finally {
+  //     dispatch(removeFromCart())
+  //   }
+  // };
 
   const handleRemoveCartItem = async (ticket) => {
     if (!currentUser) return;
@@ -47,11 +64,9 @@ const CartPortal = ({ open, onClose }) => {
       await deleteDoc(cartDocRef);
     } catch (error) {
       console.error('Error removing cart ticket: ', error);
-    } finally {
-      dispatch(removeFromCart())
     }
   };
-
+  
   if (!open) return null;
 
   return ReactDOM.createPortal(
@@ -80,8 +95,6 @@ const CartPortal = ({ open, onClose }) => {
       </Typography>
       {loading ? <Loader /> : (
         <Box>
-          {console.log(cartItems.length, 'length')}
-
           {cartItems.length > 0 ? (
             cartItems.map((ticket) => (
               <CartTicket
