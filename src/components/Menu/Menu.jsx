@@ -95,14 +95,14 @@ const Menu = (props) => {
                   </Link>
                 </Button>
               ))}
-              {isLoggedIn && auth.currentUser.uid !== ADMIN && (
+              {isLoggedIn && auth.currentUser.uid !== 'Q89mlqEtR1O3VHCAVUZSxcYbtuI3' && (
                 <Button sx={{ color: '#fff', px: 2 }}>
                   <Link to="/favoriteTicket" style={{ textDecoration: 'none', color: 'inherit' }}>
                     {t('favoriteTicket')}
                   </Link>
                 </Button>
               )}
-              {isLoggedIn && auth.currentUser.uid === ADMIN && (
+              {isLoggedIn && auth.currentUser.uid === 'Q89mlqEtR1O3VHCAVUZSxcYbtuI3' && (
                 <>
                   <Button sx={{ color: '#fff', px: 2 }}>
                     <Link to="/ticket" style={{ textDecoration: 'none', color: 'inherit' }}>

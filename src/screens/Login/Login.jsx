@@ -8,6 +8,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Snackbar from '@mui/material/Snackbar';
+import { sendEmailVerification } from 'firebase/auth';
 
 import { MAIN_COLOR } from '../../constants';
 
@@ -29,19 +30,21 @@ const Login = () => {
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
+ 
   const handleRegister = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
       await setDoc(doc(db, 'users', user.uid), {
         name: name,
         email: user.email,
       });
-
+      await sendEmailVerification(user);
+      console.log('Verification email sent');
+  
       dispatch(login({ email: user.email, uid: user.uid, name: name }));
       setError('');
-      setSnackbarMessage('Registration successful!');
+      setSnackbarMessage('Registration successful! Please verify your email.');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
 
@@ -54,11 +57,18 @@ const Login = () => {
       setSnackbarOpen(true);
     }
   };
-
+  
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      if (!user.emailVerified) {
+        setError('Your email is not verified. Please check your inbox.');
+        setSnackbarMessage('Email is not verified. Please verify your email.');
+        setSnackbarSeverity('warning');
+        setSnackbarOpen(true);
+        return;
+      }
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       const userData = userDoc.data();
       dispatch(login({ email: user.email, uid: user.uid, name: userData.name }));
@@ -77,11 +87,12 @@ const Login = () => {
       setSnackbarOpen(true);
     }
   };
-
-
+  
   const handleLogout = async () => {
     try {
+      console.log("logout")
       await signOut(auth);
+      console.log("logout")
       dispatch(logout());
       navigate('/login');
       setSnackbarMessage('Logout successful!');
@@ -156,7 +167,8 @@ const Login = () => {
                 variant="contained"
                 sx={{ mt: 2, backgroundColor: MAIN_COLOR, '&:hover': { backgroundColor: '#f7a01c' } }}
                 fullWidth
-                onClick={isRegistering ? handleLogin : handleRegister}
+                
+                onClick={isLoggedIn ? handleLogout: isRegistering ? handleLogin : handleRegister}
               >
                 {isRegistering ? t('login') : t('signUp')}
               </Button>
@@ -177,7 +189,6 @@ const Login = () => {
             </Box>
           ) : (
             <Box>
-              {/* Add content for logged-in users */}
             </Box>
           )}
         </Box>
