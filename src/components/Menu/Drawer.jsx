@@ -12,7 +12,6 @@ import { auth } from '../../firebase/firebase';
 import { ADMIN } from '../../constants';
 
 const drawerWidth = 240;
-
 const NavDrawer = ({ container, mobileOpen, handleDrawerToggle, navItems, isLoggedIn }) => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>

@@ -5,15 +5,12 @@ import { Facebook, Instagram, Telegram } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { FACEBOOK_COLOR, FOOTER_BACKGROUND_COLOR, INSTAGRAM_COLOR, MAIN_COLOR, TELEGRAM_COLOR, TEXT_COLOR } from '../../constants';
 
-
-
 const FooterContainer = styled(Box)(({ theme }) => ({
     backgroundColor: FOOTER_BACKGROUND_COLOR,
     padding: theme.spacing(4),
     borderTop: `1px solid ${theme.palette.divider}`,
     marginTop: theme.spacing(10),
 }));
-
 const FooterLink = styled(Link)(({ theme }) => ({
     color: MAIN_COLOR,
     textDecoration: 'none',
@@ -21,7 +18,6 @@ const FooterLink = styled(Link)(({ theme }) => ({
         textDecoration: 'underline',
     },
 }));
-
 const SocialMediaIcons = styled(Box)(({ theme }) => ({
     display: 'flex',
     justifyContent: 'center',

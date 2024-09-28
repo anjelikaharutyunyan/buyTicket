@@ -9,7 +9,6 @@ import Loader from '../Loader/Loader';
 import CartTicket from './CartTicket';
 import { removeFromCart, setCartCount } from '../../Store/cartSlice';
 
-
 const CartPortal = ({ open, onClose }) => {
   const currentUser = useSelector((state) => state.auth.user);
   const [loading, setLoading] = useState(true);
@@ -18,9 +17,7 @@ const CartPortal = ({ open, onClose }) => {
 
   useEffect(() => {
     if (!currentUser) return;
-
     const cartCollection = collection(db, 'users', currentUser.uid, 'cart');
-
     const unsubscribe = onSnapshot(cartCollection, (cartSnapshot) => {
       const cartList = cartSnapshot.docs.map(docSnap => ({
         id: docSnap.id,
@@ -36,11 +33,9 @@ const CartPortal = ({ open, onClose }) => {
     return () => unsubscribe();
   }, [currentUser]);
 
-
   useEffect(() => {
     dispatch(setCartCount(cartItems.length));
   }, [cartItems, dispatch]);
-
   const handleRemoveCartItem = async (ticket) => {
     if (!currentUser) return;
     try {
@@ -50,9 +45,8 @@ const CartPortal = ({ open, onClose }) => {
       console.error('Error removing cart ticket: ', error);
     }
   };
-  
-  if (!open) return null;
 
+  if (!open) return null;
   return ReactDOM.createPortal(
     <Box
       sx={{

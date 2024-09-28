@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import "./AboutUs.css"; // Ensure you have this CSS file linked
+import "./AboutUs.css"; 
 
 const AboutUs = () => {
   const { t } = useTranslation();

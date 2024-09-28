@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Snackbar from '@mui/material/Snackbar';
 import { sendEmailVerification } from 'firebase/auth';
-
+import { CircularProgress } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 
 const Login = () => {
@@ -19,18 +19,15 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-
   const navigate = useNavigate();
-
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
- 
   const handleRegister = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -59,9 +56,11 @@ const Login = () => {
   
   const handleLogin = async () => {
     try {
+      setLoading(true);
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       if (!user.emailVerified) {
+        setLoading(false);
         setError('Your email is not verified. Please check your inbox.');
         setSnackbarMessage('Email is not verified. Please verify your email.');
         setSnackbarSeverity('warning');
@@ -76,11 +75,12 @@ const Login = () => {
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
       setTimeout(() => {
+        setLoading(false)
         navigate('/');
       }, 1000);
     } catch (error) {
+      setLoading(false)
       setError('Invalid email or password');
-
       setSnackbarMessage('Login failed. Invalid email or password.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
@@ -126,7 +126,13 @@ const Login = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <Box sx={{ mt: 14}}>
+      {loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <div>
+          <Box sx={{ mt: 14}}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
             <Box sx={{ width: '100%' }}>
@@ -192,6 +198,8 @@ const Login = () => {
           )}
         </Box>
       </Box>
+        </div>
+      )}
     </Container>
   );
 };

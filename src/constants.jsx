@@ -15,7 +15,6 @@ export const FACEBOOK_COLOR = '#1877F2';
 export const INSTAGRAM_COLOR = '#C13584';
 export const TELEGRAM_COLOR = '#0088cc';
 
-
 //PAGINATION
 export const TICKETS_PER_PAGE = 8;
 

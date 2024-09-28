@@ -151,10 +151,10 @@ const Menu = (props) => {
               <MenuItem value="ru">{t('russian')}</MenuItem>
               <MenuItem value="hy">{t('armenian')}</MenuItem>
             </Select>
-            <Button sx={{ color: '#fff'}}>
+            <Button sx={{ color: '#fff' }}>
               {isLoggedIn ? (
-                <div style={{ display: 'flex'}}>
-                    <UserDropDown />
+                <div style={{ display: 'flex' }}>
+                  <UserDropDown />
                 </div>
               ) : (
                 <Link to={'/login'} style={{ textDecoration: 'none', color: 'inherit' }}>

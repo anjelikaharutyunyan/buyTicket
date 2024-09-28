@@ -10,7 +10,6 @@ const images = [
     "https://ticketon.am/sbadmin/storage/slider/15/06/16/13/1920_539_66deeba957683.jpg",
     "https://ticketon.am/sbadmin/storage/slider/09/08/04/30/1920_539_66b46dbfced4d.jpg",
 ];
-
 const MyCarousel = () => {
     return (
         <Carousel>

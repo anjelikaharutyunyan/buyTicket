@@ -39,7 +39,6 @@ const Home = () => {
         const ticketSnapshot = await getDocs(ticketsCollection);
         const today = new Date();
         const ticketList = [];
-
         for (const docSnap of ticketSnapshot.docs) {
           const ticketData = docSnap.data();
           const ticketDate = ticketData.date instanceof Timestamp
@@ -59,10 +58,8 @@ const Home = () => {
         setLoading(false);
       }
     };
-
     fetchTickets();
   }, []);
-
 
   useEffect(() => {
     const fetchSoonest = async () => {
@@ -79,7 +76,6 @@ const Home = () => {
         setLoading(false);
       }
     };
-
     fetchSoonest();
   }, []);
 
@@ -99,15 +95,16 @@ const Home = () => {
     fetchLikedTickets();
   }, [currentUser]);
 
-
   const handleLikeTicket = async (ticket) => {
+    if (currentUser.uid === 'Q89mlqEtR1O3VHCAVUZSxcYbtuI3') {
+      console.warn("Administrator cannot give likes.");
+      return;
+    }
     if (!currentUser) {
       handleOpenModal();
     }
-
     const isLiked = !!likedTickets[ticket.id];
     const updatedFavorites = { ...likedTickets, [ticket.id]: !isLiked };
-
     setLikedTickets(updatedFavorites);
 
     try {
@@ -121,7 +118,6 @@ const Home = () => {
       console.error("Error updating favorite ticket:", error);
     }
   };
-
 
   const handleAddToCart = async (ticket) => {
     if (!currentUser) {
@@ -138,8 +134,6 @@ const Home = () => {
       await setDoc(favoriteDocRef, ticket);
     }
   };
-
-
   const handleOpenModal = () => {
     if (modalRef.current) {
       modalRef.current.openModal();
@@ -147,23 +141,17 @@ const Home = () => {
       console.error('modalRef is undefined');
     }
   };
-
-
   useEffect(() => {
     if (currentUser && modalRef.current) {
       modalRef.current.closeModal();
     }
   }, [currentUser]);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
-
   const indexOfLastTicket = currentPage * TICKETS_PER_PAGE;
   const indexOfFirstTicket = indexOfLastTicket - TICKETS_PER_PAGE;
   const currentTickets = filteredTickets.slice(indexOfFirstTicket, indexOfLastTicket);
-
   return (
     <>
       <Box style={{ marginTop: '95px' }}>
@@ -198,7 +186,6 @@ const Home = () => {
         <Modal ref={modalRef}>
           <Login />
         </Modal>
-
         <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#f9be3257' }}>
           <h1 style={{ paddingLeft: '55px' }}>{t('events')}</h1>
           {loading ? <Loader /> :
@@ -221,8 +208,6 @@ const Home = () => {
                 </div>
               )}
             </div>}
-
-
           <BasicPagination
             totalItems={filteredTickets.length}
             itemsPerPage={TICKETS_PER_PAGE}
