@@ -47,7 +47,7 @@ const Login = () => {
       setTimeout(() => {
         setLoading(false)
         navigate('/');
-      }, 10000);
+      }, 1000);
     } catch (error) {
       setError(error.message);
       setSnackbarMessage('Registration failed.');
