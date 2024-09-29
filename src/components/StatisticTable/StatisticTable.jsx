@@ -38,41 +38,47 @@ const StatisticTable = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const ticketsCollection = collection(db, 'ticket');
-                const ticketSnapshot = await getDocs(ticketsCollection);
+                const [ticketSnapshot, usersSnapshot] = await Promise.all([
+                    getDocs(collection(db, 'ticket')),
+                    getDocs(collection(db, 'users'))
+                ]);
+
                 const ticketList = ticketSnapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 }));
                 setTickets(ticketList);
 
-                const usersCollection = collection(db, 'users');
-                const usersSnapshot = await getDocs(usersCollection);
                 const ticketCounts = {};
-                const cartCount = {};
+                const cartCounts = {};
 
-                for (const userDoc of usersSnapshot.docs) {
-                    const favoritesCollection = collection(db, `users/${userDoc.id}/favorites`);
-                    const favoritesSnapshot = await getDocs(favoritesCollection);
+                const favoritePromises = [];
+                const cartPromises = [];
 
-                    favoritesSnapshot.docs.forEach(favoriteDoc => {
+                usersSnapshot.docs.forEach(userDoc => {
+                    const userId = userDoc.id;
+                    favoritePromises.push(getDocs(collection(db, `users/${userId}/favorites`)));
+                    cartPromises.push(getDocs(collection(db, `users/${userId}/cart`)));
+                });
+
+                const [favoriteSnapshots, cartSnapshots] = await Promise.all([Promise.all(favoritePromises), Promise.all(cartPromises)]);
+
+                favoriteSnapshots.forEach(snapshot => {
+                    snapshot.docs.forEach(favoriteDoc => {
                         const ticketId = favoriteDoc.id;
                         ticketCounts[ticketId] = (ticketCounts[ticketId] || 0) + 1;
                     });
-                }
+                });
 
-                for (const userDoc of usersSnapshot.docs) {
-                    const cartCollection = collection(db, `users/${userDoc.id}/cart`);
-                    const cartSnapshot = await getDocs(cartCollection);
-
-                    cartSnapshot.docs.forEach(cartDoc => {
+                cartSnapshots.forEach(snapshot => {
+                    snapshot.docs.forEach(cartDoc => {
                         const ticketId = cartDoc.id;
-                        cartCount[ticketId] = (cartCount[ticketId] || 0) + 1;
+                        cartCounts[ticketId] = (cartCounts[ticketId] || 0) + 1;
                     });
-                }
+                });
 
                 setFavoriteCounts(ticketCounts);
-                setCartCounts(cartCount);
+                setCartCounts(cartCounts);
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -110,6 +116,6 @@ const StatisticTable = () => {
             </Table>
         </TableContainer>
     );
-}
+};
 
 export default StatisticTable;
