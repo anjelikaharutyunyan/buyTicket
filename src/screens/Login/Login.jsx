@@ -44,8 +44,10 @@ const Login = () => {
       setSnackbarMessage('Registration successful! Please verify your email.');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-      navigate('/');
-
+      setTimeout(() => {
+        setLoading(false)
+        navigate('/');
+      }, 10000);
     } catch (error) {
       setError(error.message);
       setSnackbarMessage('Registration failed.');
@@ -64,7 +66,9 @@ const Login = () => {
         setError('Your email is not verified. Please check your inbox.');
         setSnackbarMessage('Email is not verified. Please verify your email.');
         setSnackbarSeverity('warning');
-        setSnackbarOpen(true);
+        setTimeout(() => {
+          setSnackbarOpen(true);
+        }, 10000);
         return;
       }
       const userDoc = await getDoc(doc(db, 'users', user.uid));
