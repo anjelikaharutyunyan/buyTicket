@@ -89,32 +89,32 @@ const StatisticTable = () => {
     }, []);
 
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>Event Title</StyledTableCell>
-                        <StyledTableCell align="right">Favorites</StyledTableCell>
-                        <StyledTableCell align="right">Added to Cart</StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {tickets.map((row) => (
-                        <StyledTableRow key={row.id}>
-                            <StyledTableCell component="th" scope="row">
-                                {row.title || 'No Title'}
-                            </StyledTableCell>
-                            <StyledTableCell align="right">
-                                {favoriteCounts[row.id] || 0}
-                            </StyledTableCell>
-                            <StyledTableCell align="right">
-                                {cartCounts[row.id] || 0}
-                            </StyledTableCell>
-                        </StyledTableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+            <TableContainer component={Paper} >
+                <Table sx={{ minWidth: 700, minHeight: '80vh' }} aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell>Event Title</StyledTableCell>
+                            <StyledTableCell align="right">Favorites</StyledTableCell>
+                            <StyledTableCell align="right">Added to Cart</StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {tickets.map((row) => (
+                            <StyledTableRow key={row.id}>
+                                <StyledTableCell component="th" scope="row">
+                                    {row.title || 'No Title'}
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                    {favoriteCounts[row.id] || 0}
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                    {cartCounts[row.id] || 0}
+                                </StyledTableCell>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
     );
 };
 
