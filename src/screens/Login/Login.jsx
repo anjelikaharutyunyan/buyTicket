@@ -118,7 +118,7 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{minHeight: '60vh'}}>
+    <Container maxWidth="sm" sx={{minHeight: '50vh'}}>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
@@ -136,7 +136,7 @@ const Login = () => {
         </div>
       ) : (
         <div>
-          <Box sx={{ mt: 14}}>
+          <Box sx={{ mt: 14, mb: 5}}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {!isLoggedIn ? (
             <Box sx={{ width: '100%' }}>
