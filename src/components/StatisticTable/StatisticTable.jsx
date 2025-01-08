@@ -61,7 +61,8 @@ const StatisticTable = () => {
                     cartPromises.push(getDocs(collection(db, `users/${userId}/cart`)));
                 });
 
-                const [favoriteSnapshots, cartSnapshots] = await Promise.all([Promise.all(favoritePromises), Promise.all(cartPromises)]);
+                const [favoriteSnapshots, cartSnapshots] = await Promise.all([Promise.all(favoritePromises),
+                Promise.all(cartPromises)]);
 
                 favoriteSnapshots.forEach(snapshot => {
                     snapshot.docs.forEach(favoriteDoc => {

@@ -12,38 +12,50 @@ import { logout } from '../../store/authSlice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Profile from '../Profile/Profile';
 
 export default function UserDropDown() {
-    const user = useSelector((state) => state.auth.user);
-    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate('/login');
-    };
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
-    return (
-        <div className="dropdown-container">
-            <Dropdown>
-                <MenuButton>
-                    <AccountCircleIcon sx={{ mr: 1 }} />
-                    {user.name}
-                </MenuButton>
-                <Menu slots={{ listbox: AnimatedListbox }} style={{ zIndex: 1300 }}>
-                    <MenuItem onClick={() => console.log('Profile')}>
-                        <AccountCircleIcon sx={{ mr: 1, color: '#F9BE32' }} />
-                        Profile
-                    </MenuItem>
-                    <MenuItem onClick={handleLogout}>
-                        <LogoutIcon sx={{ mr: 1, color: '#F9BE32' }} />
-                        Log out
-                    </MenuItem>
-                </Menu>
-            </Dropdown>
-        </div>
-    );
+  const handleOpenProfile = () => {
+    setProfileOpen(true);
+  };
+
+  const handleCloseProfile = () => {
+    setProfileOpen(false);
+  };
+
+  return (
+    <div className="dropdown-container">
+      <Dropdown>
+        <MenuButton>
+          <AccountCircleIcon sx={{ mr: 1 }} />
+          {user.name}
+        </MenuButton>
+        <Menu slots={{ listbox: AnimatedListbox }} style={{ zIndex: 1300 }}>
+          <MenuItem onClick={() => handleOpenProfile()}>
+            <AccountCircleIcon sx={{ mr: 1, color: '#F9BE32' }} />
+            Profile
+          </MenuItem>
+          <MenuItem onClick={handleLogout}>
+            <LogoutIcon sx={{ mr: 1, color: '#F9BE32' }} />
+            Log out
+          </MenuItem>
+        </Menu>
+        <Profile open={profileOpen} onClose={handleCloseProfile} />
+      </Dropdown>
+    </div>
+  );
 }
 
 const Listbox = styled('ul')`
@@ -81,30 +93,30 @@ const Listbox = styled('ul')`
 `;
 
 const AnimatedListbox = React.forwardRef(function AnimatedListbox(props, ref) {
-    const { ownerState, ...other } = props;
-    const popupContext = React.useContext(PopupContext);
+  const { ownerState, ...other } = props;
+  const popupContext = React.useContext(PopupContext);
 
-    if (popupContext == null) {
-        throw new Error(
-            'The `AnimatedListbox` component cannot be rendered outside a `Popup` component',
-        );
-    }
-
-    const verticalPlacement = popupContext.placement.split('-')[0];
-
-    return (
-        <CssTransition
-            className={`placement-${verticalPlacement}`}
-            enterClassName="open"
-            exitClassName="closed"
-        >
-            <Listbox {...other} ref={ref} />
-        </CssTransition>
+  if (popupContext == null) {
+    throw new Error(
+      'The `AnimatedListbox` component cannot be rendered outside a `Popup` component',
     );
+  }
+
+  const verticalPlacement = popupContext.placement.split('-')[0];
+
+  return (
+    <CssTransition
+      className={`placement-${verticalPlacement}`}
+      enterClassName="open"
+      exitClassName="closed"
+    >
+      <Listbox {...other} ref={ref} />
+    </CssTransition>
+  );
 });
 
 AnimatedListbox.propTypes = {
-    ownerState: PropTypes.object.isRequired,
+  ownerState: PropTypes.object.isRequired,
 };
 
 const MenuItem = styled(BaseMenuItem)`
